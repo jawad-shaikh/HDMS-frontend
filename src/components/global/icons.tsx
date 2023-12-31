@@ -103,9 +103,15 @@ export const Icons = {
     ),
     upload: (props: IconProps) => (
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" {...props} xmlns="http://www.w3.org/2000/svg">
-            <path d="M5.33398 21.3385V22.6663C5.33398 24.8755 7.12485 26.6663 9.33398 26.6663H22.6673C24.8765 26.6663 26.6673 24.8755 26.6673 22.6663V21.333" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M16 20.6667V6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M20.6673 10.6667L16.0007 6L11.334 10.6667" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5.33398 21.3385V22.6663C5.33398 24.8755 7.12485 26.6663 9.33398 26.6663H22.6673C24.8765 26.6663 26.6673 24.8755 26.6673 22.6663V21.333" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M16 20.6667V6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M20.6673 10.6667L16.0007 6L11.334 10.6667" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
+    ),
+    link: (props: IconProps) => (
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" {...props} xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.20508 8.5197L7.98722 3.91216C12.5111 -0.452562 19.8585 6.28119 15.1506 10.8235L9.22376 16.5417C6.15396 19.5035 1.16822 14.9342 4.36289 11.8519L10.2045 6.21593C11.8201 4.6571 14.4442 7.06201 12.7628 8.68425L7.91048 13.3333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+
     )
 }

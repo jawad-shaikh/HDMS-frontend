@@ -1,5 +1,5 @@
 import { TDepartment, TUser } from "@/utils/types";
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 
 interface Credentials {
   password: string;
@@ -13,7 +13,7 @@ interface APIInstance extends AxiosInstance {
   users: () => Promise<any>;
   hods: () => Promise<any>;
   createUser: (data: TUser) => Promise<any>;
-  updateUser: (id:string, user: TUser) => Promise<any>;
+  updateUser: (id:string, user: any) => Promise<any>;
   deleteUser: (id:string) => Promise<any>;
 
   departments: () => Promise<any>;
@@ -32,6 +32,12 @@ interface APIInstance extends AxiosInstance {
   
   submissionDocuments: () => Promise<any>;
   uploadDocument: (data: any) => Promise<any>;
+  updateUploadDocument: (id:string, data: any) => Promise<any>;
+  downloadDocuments: (id: string) => Promise<any>;
+
+  documentApprove: (id: string) => Promise<any>;  
+  documentReject: (id: string) => Promise<any>;
+  
 
   notifications: () => Promise<any>;
   readNotifications: () => Promise<any>;
@@ -64,8 +70,8 @@ API.createUser = (data: TUser) => {
   return API.post('/users', data);
 };
 
-API.updateUser = (id: string, department: TUser) => {
-  return API.patch(`/users/${id}`, department);
+API.updateUser = (id: string, data: any) => {
+  return API.patch(`/users/${id}`, data);
 };
 
 API.deleteUser = (id: string) => {
@@ -122,6 +128,22 @@ API.submissionDocuments = () => {
 API.uploadDocument = (data: any) => {
   return API.post('/documents/submissions', data)
 }
+API.updateUploadDocument = (id:string,data: any) => {
+  return API.patch(`/documents/submissions/${id}`, data)
+}
+
+API.downloadDocuments= (id: string) => {
+  return API.get(`/documents/submissions/${id}/docs`)
+}
+
+API.documentApprove = (id: string) => {
+  return API.patch(`documents/submissions/${id}/approve`)
+}
+API.documentReject = (id: string) => {
+  return API.patch(`documents/submissions/${id}/reject`)
+}
+
+
 
 API.notifications = () => {
   return API.get('/notifications')
@@ -130,6 +152,7 @@ API.notifications = () => {
 API.readNotifications = () => {
   return API.post('notifications/mark-all-as-seen')
 }
+
 
 API.interceptors.request.use(
   (config: any) => {
@@ -153,7 +176,11 @@ API.interceptors.response.use(
     // Do something with successful response
     return response;
   },
-  (error: AxiosError) => {
+  (error: any) => {
+    const {data} = error.response
+    if (data.error === "Authorization Token not provided."){
+      window.location.href = '/login'
+    }
     // Do something with response error
     return Promise.reject(error);
   }

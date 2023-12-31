@@ -28,13 +28,13 @@ const EditUserModal: React.FC<any> = ({defaultValue, closeModal}) => {
     });
 
     const onSubmit = async (data: TUser) => {
-        const {firstName, lastName, idNumber,employeeNumber,role, departmentId, email ,password } =  data;
+        const {firstName, lastName, idNumber,employeeNumber,role, departmentId ,password } =  data;
         try {
 
             if(departmentId){
-                await API.createUser({firstName, lastName, idNumber,employeeNumber,role, departmentId: Number(departmentId), email ,password })
+                await API.updateUser(defaultValue.id,{firstName, lastName, idNumber,employeeNumber,role, departmentId: Number(departmentId) ,password })
             }else {
-                await API.createUser({firstName, lastName, idNumber,employeeNumber,role, email ,password });   
+                await API.updateUser(defaultValue.id, {firstName, lastName, idNumber,employeeNumber,role ,password });   
             }
 
             toast.success('New user created')

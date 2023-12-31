@@ -100,7 +100,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     fetchUsers()
-  }, [create, update])
+  }, [create, update, deleteM])
   
 
   return (

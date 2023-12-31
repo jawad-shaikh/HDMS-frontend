@@ -12,7 +12,7 @@ import { Icons } from '@/components/global/icons'
 
 const EditRequiredDocumentModal: React.FC<any> = ({defaultValue, closeModal}) => {
     const [users, setUsers] = useState([])
-    const [isRepeated, setIsRepeated] = useState(false);
+    const [isRepeated, setIsRepeated] = useState(defaultValue.isRepeated);
 
     const { register, handleSubmit, formState: { errors } } = useForm<TRequiredDocument>({
         resolver: yupResolver(requiredDocumentSchema),
@@ -59,7 +59,7 @@ const EditRequiredDocumentModal: React.FC<any> = ({defaultValue, closeModal}) =>
                 }
             </div>
             <label htmlFor="isRepeated">
-                <input type="checkbox" name="isRepeated" id="isRepeated" onChange={() => setIsRepeated(!isRepeated)} />  Repeated </label>
+                <input type="checkbox" name="isRepeated" id="isRepeated" checked={isRepeated} onChange={() => setIsRepeated(!isRepeated)} />  Repeated </label>
 
 
             <div className='flex items-center justify-end mt-16'>

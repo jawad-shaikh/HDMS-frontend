@@ -16,6 +16,8 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function RequiredDocumentsPage() {
+
+  const user = JSON.parse(localStorage.getItem('user') || '');
   const [documents, setDocuments] = useState([]);
 
   const [document, setDocument] = useState({});
@@ -42,24 +44,28 @@ export default function RequiredDocumentsPage() {
       id: "action",
       header: () => 'Action',
       cell: props => <div className="flex items-center gap-4">
-        <button onClick={() => {
-          setDocument(props.row.original)
-          setUpload(true)
-        }}>
-          <Icons.upload className="text-green-500 w-5 h-5" />
-        </button>
-        <button onClick={() => {
-          setDocument(props.row.original)
-          setUpdate(true)
-        }}>
-          <Icons.edit className="text-blue-500 w-5 h-5" />
-        </button>
-        <button onClick={() => {
-          setDocument(props.row.original)
-          setDelete(true)
-        }}>
-          <Icons.trash className="text-red-500 w-6 h-6" />
-        </button>
+        {user.role === "ADMIN" || user.role === "HR" ?
+          <>
+            <button onClick={() => {
+              setDocument(props.row.original)
+              setUpdate(true)
+            }}>
+              <Icons.edit className="text-blue-500 w-5 h-5" />
+            </button>
+            <button onClick={() => {
+              setDocument(props.row.original)
+              setDelete(true)
+            }}>
+              <Icons.trash className="text-red-500 w-6 h-6" />
+            </button></> :
+          <button onClick={() => {
+            setDocument(props.row.original)
+            setUpload(true)
+          }}>
+            <Icons.upload className="text-green-500 w-5 h-5" />
+          </button>
+
+        }
       </div>,
     }),
     // Add more columns as needed
@@ -75,13 +81,20 @@ export default function RequiredDocumentsPage() {
   }
 
   useEffect(() => {
-    fetchDocuments()
-  }, [create,update,deleteM])
+    if (!create && !update && !deleteM && !upload) {
+      fetchDocuments()
+    }
+  }, [create, update, deleteM, upload])
 
 
   return (
     <>
-      <PageTitle title={"Required Documents"} icon={<Icons.required className="w-8 h-8" />} buttonText="Add Document" onClick={() => setCreate(true)} />
+
+      {
+        user.role === "ADMIN" || user.role === "HR" ? <PageTitle title={"Required Documents"} icon={<Icons.required className="w-8 h-8" />} buttonText="Add Document" onClick={() => setCreate(true)} />
+          : <PageTitle title={"Required Documents"} icon={<Icons.required className="w-8 h-8" />} />
+
+      }
       <Table data={documents} columns={columns} />
 
       <ModalWrapper title="Create New Document" open={create} setOpen={setCreate}>

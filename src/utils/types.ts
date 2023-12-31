@@ -53,9 +53,3 @@ export type TRequiredDocument = {
     documentType: string;
     repeated?: boolean;
 }
-
-export interface IUploadDocument {
-    purpose: string;
-    description: string;
-    expireDate: Date;
-  }

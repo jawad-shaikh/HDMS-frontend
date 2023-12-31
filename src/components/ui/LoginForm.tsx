@@ -10,6 +10,7 @@ import { loginSchema } from '@/utils/validations';
 import API from '@/service/api';
 import useAuthStore from '@/stores/authStore';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 
 const LoginForm = () => {
@@ -29,12 +30,13 @@ const LoginForm = () => {
             if(token) {
                 login(token, userData);
                 isRemember ? localStorage.setItem('token', token) : sessionStorage.setItem('token', token);
-                localStorage.setItem('user', userData);
-                router.push('/users')
+                localStorage.setItem('user', JSON.stringify(userData));
+                router.push('/required-documents')
             }
             
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            toast.error(error.response.data.error);
+            console.log(error.response.data.error)
         }
         
     };

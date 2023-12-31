@@ -77,7 +77,7 @@ export default function DepartmentPage() {
     // Add more columns as needed
   ];
 
-  const fetchUsers = async () => {
+  const fetchDepartments = async () => {
     try {
       const {data} = await API.departments();
       setDepartments(data.data)
@@ -87,8 +87,10 @@ export default function DepartmentPage() {
   }
 
   useEffect(() => {
-    fetchUsers()
-  }, [create, update])
+    if(!create && !update && !deleteM){
+      fetchDepartments()
+    }
+  }, [create, update, deleteM])
 
   return (
     <>

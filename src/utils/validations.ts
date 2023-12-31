@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 export const loginSchema = yup.object().shape({
     email: yup.string().email('Email address is not valid').required('Email is required'),
-    password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+    password: yup.string().required('Password is required'),
 });
 export const registerSchema = yup.object().shape({
     firstName: yup.string().required('First name is required').min(2, 'First name must be at least 2 characters'),
@@ -33,10 +33,4 @@ export const requiredDocumentSchema = yup.object().shape({
   title: yup.string().required('Title is required'),
   description: yup.string().required('Description is required'),
   documentType: yup.string().required('Document type is required'),
-});
-
-export const uploadDocumentSchema = yup.object().shape({
-  purpose: yup.string().required('Purpose is required'),
-  description: yup.string().required('Note is required'),
-  expireDate: yup.date().required('Date proposed is required'),
 });

@@ -6,6 +6,7 @@ import API from '@/service/api'
 
 const Header: React.FC = () => {
   const path = usePathname();
+  const user = JSON.parse(localStorage.getItem('user') || '')
 
   useEffect(() => {
     if (path === "/users") {
@@ -30,7 +31,6 @@ const Header: React.FC = () => {
 
   const fetchNotifications = async () => {
     const { data } = await API.notifications()
-    console.log(data)
     setNotifications(data.data)
   }
 
@@ -41,10 +41,8 @@ const Header: React.FC = () => {
   }
 
   useEffect(() => {
-    if (notifications) {
-      fetchNotifications()
-    }
-  }, [notifications])
+    fetchNotifications()
+  }, [])
 
   return (
     <header className="flex items-center justify-between py-4 px-8 border-b border-gray">
@@ -88,8 +86,8 @@ const Header: React.FC = () => {
         <div className="flex items-center gap-3">
           <Icons.user />
           <div>
-            <p className="text-sm font-semibold">Jesse Pinkman</p>
-            <p className="text-xs text-[#9E9E9E]">Admin</p>
+            <p className="text-sm font-semibold">{user.firstName} {user.lastName}</p>
+            <p className="text-xs text-[#9E9E9E]">{user.role}</p>
           </div>
         </div>
       </div>

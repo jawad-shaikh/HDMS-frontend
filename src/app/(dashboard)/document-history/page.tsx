@@ -18,40 +18,41 @@ export default function DocumentHistoryPage() {
       cell: (info) => info.getValue().toString(),
       header: () => 'No',
     }),
-    columnHelper.accessor('title', {
-      cell: (info) => info.getValue(),
-      header: 'Name',
+    columnHelper.accessor((row) => row.user ? `${row.user.firstName} ${row.user.lastName}` : '-', {
+      id: "name",
+      header: "Name",
     }),
-    columnHelper.accessor('createdAt', {
-      cell: (info) => info.getValue(),
-      header: 'No Employee',
+    columnHelper.accessor((row) => row.user ? `${row.user.employeeNumber}` : '-', {
+      id: "noEmployee",
+      header: "No Employee",
     }),
-    columnHelper.accessor('title', {
-      cell: (info) => info.getValue(),
-      header: 'No ID',
+    columnHelper.accessor((row) => row.user ? `${row.user.idNumber}` : '-', {
+      id: "noId",
+      header: "No ID",
     }),
-    columnHelper.accessor('title', {
-      cell: (info) => info.getValue(),
-      header: 'Title',
+    columnHelper.accessor((row) => row.documentRequest ? `${row.documentRequest.title}` : '-', {
+      id: "title",
+      header: "Title",
     }),
-    columnHelper.accessor('title', {
-      cell: (info) => info.getValue(),
-      header: 'HR Employee',
+    columnHelper.accessor((row) => row.documentRequest ? `${row.documentRequest.createdBy.firstName} ${row.documentRequest.createdBy.lastName}` : '-', {
+      id: "title",
+      header: "HR Employee",
     }),
-    columnHelper.accessor('title', {
+    
+    columnHelper.accessor('updatedAt', {
       cell: (info) => convertDate(info.getValue()),
       header: 'Upload Date',
     }),
-    columnHelper.accessor('title', {
+    columnHelper.accessor('expireDate', {
       cell: (info) => convertDate(info.getValue()),
       header: 'Expiry Date',
     }),
     columnHelper.display({
-      id: "action",
-      header: () => 'Action',
-      cell: props => <div className="flex items-center gap-4">
-
-      </div>,
+      id: "status",
+      header: () => 'status',
+      cell: props => <p className={`px-4 py-2 text-center border ${props.row.original.status === "PENDING" ? "border-black/50 text-black/50" : props.row.original.status === "REJECTED" ? "border-red text-red" : "border-primary text-primary"} `}>
+        {props.row.original.status}
+      </p>,
     }),
     // Add more columns as needed
   ];

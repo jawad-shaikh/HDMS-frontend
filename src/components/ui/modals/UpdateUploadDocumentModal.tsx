@@ -5,14 +5,14 @@ import API from '@/service/api'
 import toast from 'react-hot-toast'
 import { Icons } from '@/components/global/icons'
 
-const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
+const UpdateUploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
 
     const [selectedFiles, setSelectedFiles] = useState<any>([] as any);
 
     const { register, handleSubmit, formState: { errors } } = useForm<any>();
 
     const onSubmit = async (fData: any) => {
-        console.log(fData)
+        console.log(data)
         if (selectedFiles.length === 0) {
             toast.error('Please Select Files');
             return null;
@@ -26,7 +26,6 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
                 console.log(selectedFiles[i]);
                 formData.append('documents', selectedFiles[i]); // Use a consistent name for all files
             }
-            formData.append("documentRequestId", data.id);
             if(data.isRepeated){
                 formData.append("expireDate", new Date(fData.expireDate).toISOString());
             }
@@ -35,7 +34,7 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
             
 
             await toast.promise(
-                API.uploadDocument(formData),
+                API.updateUploadDocument(data.id,formData),
                 {
                     loading: 'Uploading document...',
                     success: 'Document uploaded successfully',
@@ -58,11 +57,11 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className='mb-4'>
                 <label className='block mb-2 text-sm'>Purpose</label>
-                <input value={data.title} disabled className='block border-2 border-gray w-full p-2 outline-none'/>
+                <input value={data.documentRequest.title} disabled className='block border-2 border-gray w-full p-2 outline-none'/>
             </div>
             <div className='mb-4'>
                 <label className='block mb-2 text-sm'>Description</label>
-                <textarea value={data.description} disabled className='block border-2 border-gray w-full p-2 outline-none'/>
+                <textarea value={data.documentRequest.description} disabled className='block border-2 border-gray w-full p-2 outline-none'/>
             </div>
 
             <div className='mb-4'>
@@ -105,4 +104,4 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
     )
 }
 
-export default UploadDocumentModal
+export default UpdateUploadDocumentModal
