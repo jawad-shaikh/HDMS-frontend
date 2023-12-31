@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import PageTitle from "@/components/global/PageTitle";
 import { Icons } from "@/components/global/icons";
 import PanelWrapper from "@/components/ui/PanelWrapper";
@@ -17,9 +17,9 @@ export default function ReceivedDocumentsPage() {
   const [isPanelOpen, setPanelOpen] = useState(false);
 
   const columns = [
-    columnHelper.accessor('id', {
+    columnHelper.accessor("id", {
       cell: (info) => info.getValue().toString(),
-      header: () => 'No',
+      header: () => "No",
     }),
     columnHelper.accessor((row) => row.user ? `${row.user.firstName} ${row.user.lastName}` : '-', {
       id: "name",
@@ -44,7 +44,7 @@ export default function ReceivedDocumentsPage() {
 
     columnHelper.accessor('updatedAt', {
       cell: (info) => convertDate(info.getValue()),
-      header: 'Upload Date',
+      header: "Upload Date",
     }),
     columnHelper.accessor('expireDate', {
       cell: (info) => info.getValue() ? convertDate(info.getValue()) : '-',
@@ -68,7 +68,7 @@ export default function ReceivedDocumentsPage() {
       const { data } = await API.submissionDocuments();
       setDocuments(data.data)
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
   }
   
@@ -89,5 +89,5 @@ export default function ReceivedDocumentsPage() {
       <PanelWrapper open={isPanelOpen} setOpen={setPanelOpen} title={'Detail Document'} document={document} />
       ) : null}
     </>
-  )
+  );
 }
