@@ -8,12 +8,13 @@ import { redirect, useRouter } from 'next/navigation'
 
 const SideMenu = () => {
   const router = useRouter()
+  const user = JSON.parse(localStorage.getItem('user') || '')
+
   const logout = () => {
     localStorage.removeItem('token')
     sessionStorage.removeItem('token')
     router.push('/login')
   }
-  const user = JSON.parse(localStorage.getItem('user') || '')
   return (
     <div className="flex h-screen w-[72px] flex-col justify-between border-e border-gray">
       <div>
@@ -42,6 +43,7 @@ const SideMenu = () => {
               <SideLink icon={<Icons.upload className=' w-5' />} url="/upload-documents" />
               <SideLink icon={<Icons.history className=' w-5' />} url="/document-history" />
               <SideLink icon={<Icons.error className=' w-5' />} url="/expired-documents" />
+              <SideLink icon={<Icons.departmentEx className=' w-5' />} url="/department-expired-documents" />
             </> : <>
               <SideLink icon={<Icons.required className=' w-5' />} url="/required-documents" />
               <SideLink icon={<Icons.upload className=' w-5' />} url="/upload-documents" />

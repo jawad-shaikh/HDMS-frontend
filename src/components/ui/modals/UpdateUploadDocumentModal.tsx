@@ -12,21 +12,20 @@ const UpdateUploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<any>();
 
     const onSubmit = async (fData: any) => {
-        console.log(data)
-        if (selectedFiles.length === 0) {
-            toast.error('Please Select Files');
-            return null;
-        }
+        
 
         try {
             const formData = new FormData();
 
-            // Append each file to FormData
-            for (let i = 0; i < selectedFiles.length; i++) {
-                console.log(selectedFiles[i]);
-                formData.append('documents', selectedFiles[i]); // Use a consistent name for all files
+            if (selectedFiles.length > 0) {
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    console.log(selectedFiles[i]);
+                    formData.append('documents', selectedFiles[i]); // Use a consistent name for all files
+                }
             }
-            if(data.isRepeated){
+            // Append each file to FormData
+           
+            if(data.documentRequest.isRepeated){
                 formData.append("expireDate", new Date(fData.expireDate).toISOString());
             }
             
@@ -89,10 +88,10 @@ const UpdateUploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
                 </div>
             </div>
             {
-                data.isRepeated && (
+                data.documentRequest.isRepeated && (
                     <div className='mb-4'>
                         <label className='block mb-2 text-sm' htmlFor={'expiredDate'}>Expired Date</label>
-                        <input required type='date' id={'expiredDate'} className='block border-2 border-gray w-full p-2 outline-none' placeholder={'Enter notes document'} {...register('expireDate')} aria-invalid={errors.expireDate ? "true" : "false"} />
+                        <input type='date' id={'expiredDate'} className='block border-2 border-gray w-full p-2 outline-none' placeholder={'Enter notes document'} {...register('expireDate')} aria-invalid={errors.expireDate ? "true" : "false"} />
                     </div>
                 )
             }

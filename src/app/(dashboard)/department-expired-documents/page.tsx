@@ -11,9 +11,10 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+
 const columnHelper = createColumnHelper<any>();
 
-export default function DocumentHistoryPage() {
+export default function ExpiredDocumentsPage() {
   const [documents, setDocuments] = useState([]);
   const [document, setDocument] = useState<any>({});
   const [isPanelOpen, setPanelOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function DocumentHistoryPage() {
       header: "Title",
     }),
     columnHelper.accessor((row) => row.documentRequest ? `${row.documentRequest.createdBy.firstName} ${row.documentRequest.createdBy.lastName}` : '-', {
-      id: "hrEmployee",
+      id: "title",
       header: "HR Employee",
     }),
     
@@ -54,13 +55,6 @@ export default function DocumentHistoryPage() {
     columnHelper.accessor('expireDate', {
       cell: (info) => convertDate(info.getValue()),
       header: 'Expiry Date',
-    }),
-    columnHelper.display({
-      id: "status",
-      header: () => 'status',
-      cell: props => <p className={`px-4 py-2 text-center border ${props.row.original.status === "PENDING" ? "border-black/50 text-black/50" : props.row.original.status === "REJECTED" ? "border-red text-red" : "border-primary text-primary"} `}>
-        {props.row.original.status}
-      </p>,
     }),
     columnHelper.display({
       id: "action",
@@ -75,14 +69,6 @@ export default function DocumentHistoryPage() {
         }}>
           <Icons.eye />
         </button>
-        {
-       (user.role === "STAFF" || user.role === "HOD") && props.row.original.status === "REJECTED" ? <button onClick={() => {
-        setDocument(props.row.original)
-        setUpdate(true)
-      }}>
-        <Icons.upload className="text-blue-500 w-5 h-5" />
-      </button> : null
-      }
         </div>,
     }),
     // Add more columns as needed
@@ -90,7 +76,7 @@ export default function DocumentHistoryPage() {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await API.documentHistory();
+      const { data } = await API.departmentExpiredHistory();
       setDocuments(data.data)
     } catch (error: any) {
       toast.error(error.message)
@@ -99,17 +85,16 @@ export default function DocumentHistoryPage() {
 
   useEffect(() => {
     fetchDocuments()
-  }, [update, isPanelOpen])
-
+  }, [isPanelOpen, update])
   return (
     <>
-      <PageTitle title={"Document History"} icon={<Icons.history className="w-8 h-8" />} />
+      <PageTitle title={"Department Expired Documents"} icon={<Icons.departmentEx className="w-8 h-8" />} />
       <Table data={documents} columns={columns} />
+
       {document ? (
       <PanelWrapper open={isPanelOpen} setOpen={setPanelOpen} title={'Detail Document'} document={document} />
       ) : null}
-
-<ModalWrapper title="Update Documents Form" open={update} setOpen={setUpdate}>
+      <ModalWrapper title="Update Documents Form" open={update} setOpen={setUpdate}>
         <UpdateUploadDocumentModal data={document} closeModal={() => setUpdate(false)} />
       </ModalWrapper>
     </>

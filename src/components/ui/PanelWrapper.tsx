@@ -5,49 +5,50 @@ import { Icons } from '../global/icons'
 import { convertDate } from '@/utils/helper'
 import API from '@/service/api'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
-const PanelWrapper = ({ open, setOpen, title, document }: any) => {
-    const user  = JSON.parse(localStorage.getItem('user') || '')
+const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
+    const user = JSON.parse(localStorage.getItem('user') || '')
     const [isApprove, setIsApprove] = useState('');
     const downloadDoc = async (id: string) => {
         try {
-          const { data } = await API.downloadDocuments(id);
-          const { documents } = data.data;
-      
-          documents.forEach((document: any) => {
-            const link = window.document.createElement('a');
-            link.href = document.imageUrl;
-            link.download = document.originalName; // You can set the desired file name here
-            link.setAttribute("target", "_blank");
-            window.document.body.appendChild(link);
-            link.click();
-            // window.document.body.removeChild(link);
-          });
+            const { data } = await API.downloadDocuments(id);
+            const { documents } = data.data;
+
+            documents.forEach((document: any) => {
+                const link = window.document.createElement('a');
+                link.href = document.imageUrl;
+                link.download = document.originalName; // You can set the desired file name here
+                link.setAttribute("target", "_blank");
+                window.document.body.appendChild(link);
+                link.click();
+                // window.document.body.removeChild(link);
+            });
         } catch (error) {
-          console.error('Error downloading documents:', error);
+            console.error('Error downloading documents:', error);
         }
-      };
-    
+    };
+
 
     const updateDoc = async () => {
         try {
-                if(isApprove){
-                    if(isApprove === "APPROVED"){
-                        await API.documentApprove(document.id)
-                    }else {
-                        await API.documentReject(document.id)
-                    }
+            if (isApprove) {
+                if (isApprove === "APPROVED") {
+                    await API.documentApprove(document.id)
+                } else {
+                    await API.documentReject(document.id)
                 }
+            }
             toast.success('New user created')
             // setOpen()
         } catch (error: any) {
             console.log(error)
             toast.error(error.message)
-        }finally{
+        } finally {
             setOpen(false)
         }
     }
-     
+
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -112,7 +113,7 @@ const PanelWrapper = ({ open, setOpen, title, document }: any) => {
                                                 Information Document
                                             </h2>
 
-                                            <dd className="mt-2 text-sm text-[#616161] sm:col-span-2 sm:mt-0 border border-gray mb-6">
+                                            <dd className="mt-2 text-sm text-[#616161] sm:col-span-2 sm:mt-0 border border-gray mb-4">
                                                 <div className="flex items-center justify-between p-4 border-b border-gray">
                                                     <h4 className="font-semibold">
                                                         Attached Documents
@@ -140,7 +141,11 @@ const PanelWrapper = ({ open, setOpen, title, document }: any) => {
                                                         ))}
                                                 </ul>
                                             </dd>
+                                            {
+                                                document.status === "PENDING" && <label htmlFor="remember">
+                                                    <input disabled checked={!(document?.documents?.length && !document?.documents[0].hasDownloaded)} type="checkbox" name="remember" id="remember" className='mb-6 text-xs' />  Document Received and Downloaded</label>
 
+                                            }
                                             {
                                                 document.documentRequest && <div className="border-t border-gray">
                                                     <div className='my-4'>
@@ -158,7 +163,7 @@ const PanelWrapper = ({ open, setOpen, title, document }: any) => {
                                                         </div>
                                                         <div className='mb-4'>
                                                             <label className='block mb-2 text-sm'>Status</label>
-                                                            <select defaultValue={document.status} onChange={(e) => setIsApprove(e.target.value)} className='block border-2 border-gray w-full p-2 outline-none' >
+                                                            <select defaultValue={document.status} disabled={!isUpdate} onChange={(e) => setIsApprove(e.target.value)} className='block border-2 border-gray w-full p-2 outline-none' >
                                                                 <option disabled>PENDING</option>
                                                                 <option value="APPROVED">APPROVED</option>
                                                                 <option value="REJECTED">REJECTED</option>
@@ -190,41 +195,46 @@ const PanelWrapper = ({ open, setOpen, title, document }: any) => {
 
 
                                                 <ul>
-                                                    <li className='flex items-start relative justify-between pl-4 py-4'>
-                                                        <svg className="absolute -left-[12px]" width="24" height="84" viewBox="0 0 24 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <circle cx="12" cy="12" r="6" fill="#004AAB" />
-                                                            <path d="M12 28V84" stroke="#004AAB" />
-                                                        </svg>
+                                                    {document.documentHistory?.map((history: any) => (
+                                                        <li className='flex items-start relative justify-between pl-4 py-4'>
+                                                            <svg className="absolute  h-[50px] -left-[12px]" width="24" height="84" viewBox="0 0 24 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <circle cx="12" cy="12" r="6" fill="#004AAB" />
+                                                                <path d="M12 28V84" stroke="#004AAB" />
+                                                            </svg>
 
-                                                        <div>
-                                                            <p className='text-sm font-semibold'>notification.title</p>
-                                                            <q className='text-xs mt-2 block'>notification.description</q>
-                                                        </div>
-                                                        <p className='text-xs'>19/12/2023</p>
-                                                    </li>
+                                                            <div>
+                                                                <p className='text-sm font-semibold'>{history.action}</p>
+                                                                {/* <q className='text-xs mt-2 block'>notification.description</q> */}
+                                                            </div>
+                                                            <p className='text-xs'>{convertDate(history.createdAt)}</p>
+                                                        </li>
+                                                    )).reverse()}
+
                                                     <li className='flex items-start relative justify-between pl-4 py-4'>
-                                                        <svg className="absolute -left-[12px]" width="24" height="84" viewBox="0 0 24 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <svg className="absolute h-[50px] -left-[12px]" width="24" height="84" viewBox="0 0 24 84" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <circle cx="12" cy="12" r="6" fill="#004AAB" />
                                                             <path d="M12 28V84" stroke="#004AAB" />
                                                         </svg>
                                                         <div>
-                                                            <p className='text-sm font-semibold'>notification.title</p>
-                                                            <q className='text-xs mt-2 block'>notification.description</q>
+                                                            <p className='text-sm font-semibold'>Requested document by {document.documentRequest?.createdBy?.firstName} {document.documentRequest?.createdBy?.lastName}</p>
+                                                            {/* <q className='text-xs mt-2 block'>notification.description</q> */}
                                                         </div>
-                                                        <p className='text-xs'>19/12/2023</p>
+                                                        <p className='text-xs'>{convertDate(document.documentRequest?.createdAt)}</p>
                                                     </li>
-                                                    {/* ))
-                  } */}
                                                 </ul>
                                             </ details>
 
-                                            <div className='flex items-center justify-end mt-16'>
-                                                <button onClick={() => setOpen(false)} type='button' className='py-3 px-10 font-semibold'>Cancel</button>
-                                                <button disabled={isApprove ? false : true} onClick={updateDoc} className='bg-primary py-3 px-10 text-white font-semibold'>Update</button>
-                                            </div>
+                                        {
+                                            isUpdate ?  <div className='flex items-center justify-end mt-16'>
+                                            <button onClick={() => setOpen(false)} type='button' className='py-3 px-10 font-semibold'>Cancel</button>
+                                            <button disabled={isApprove ? false : true} onClick={updateDoc} className='bg-primary py-3 px-10 text-white font-semibold'>Update</button>
+                                        </div>: null
+                                        }
+
+                                           
                                         </div>
 
-                                            
+
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

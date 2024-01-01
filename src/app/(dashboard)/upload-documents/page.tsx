@@ -86,7 +86,7 @@ export default function UploadDocumentPage() {
 
   return (
     <>
-      <PageTitle title={"Upload Documents"} icon={<Icons.upload className="w-8 h-8" />} />
+      <PageTitle title={"Uploaded Documents"} icon={<Icons.upload className="w-8 h-8" />} />
       <Table data={documents} columns={columns} />
 
       {document ? (

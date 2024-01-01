@@ -86,7 +86,7 @@ export default function ReceivedDocumentsPage() {
       <Table data={documents} columns={columns} />
 
       {document ? (
-      <PanelWrapper open={isPanelOpen} setOpen={setPanelOpen} title={'Detail Document'} document={document} />
+      <PanelWrapper open={isPanelOpen} setOpen={setPanelOpen} title={'Detail Document'} isUpdate={true} document={document} />
       ) : null}
     </>
   );

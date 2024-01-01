@@ -28,7 +28,8 @@ interface APIInstance extends AxiosInstance {
 
   documentHistory: () => Promise<any>;
   expiredHistory: () => Promise<any>;
-
+  departmentExpiredHistory: () => Promise<any>;
+  
   submissionDocuments: () => Promise<any>;
   uploadDocument: (data: any) => Promise<any>;
   updateUploadDocument: (id:string, data: any) => Promise<any>;
@@ -43,7 +44,7 @@ interface APIInstance extends AxiosInstance {
 }
 
 const API = axios.create({
-  baseURL: "http://192.168.0.189:4400/api/v1",
+  baseURL: "https://s2wz3vsq-4400.inc1.devtunnels.ms/api/v1",
   timeout: 30000,
   timeoutErrorMessage: "Timeout error",
 }) as APIInstance;
@@ -117,6 +118,9 @@ API.documentHistory = () => {
 
 API.expiredHistory = () => {
   return API.get(`/documents/expired`);
+};
+API.departmentExpiredHistory= () => {
+  return API.get(`/documents/expired?department=true`);
 };
 
 API.submissionDocuments = () => {

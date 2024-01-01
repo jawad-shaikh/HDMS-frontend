@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormInput from './FormInput';
@@ -10,27 +10,46 @@ import { registerSchema } from '@/utils/validations';
 import FormSelect from './FormSelect';
 import { useRouter } from 'next/navigation';
 import API from '@/service/api';
+import toast from 'react-hot-toast';
 
 
 
 
 const RegisterForm = () => {
     const router = useRouter();
+    const [departments, setDepartments] = useState([])
+
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
         resolver: yupResolver(registerSchema)
     });
 
     const onSubmit = async(credential: RegisterForm) => {
-       const {confirmPassword, ...data} = credential;
+       const {confirmPassword, departmentId, ...data} = credential;
        console.log(credential, data);
         try {
-            await API.register(data);
+            await API.register({...data, departmentId: Number(departmentId)});
             router.push('/login')
-        } catch (error) {
+        } catch (error: any) {
             console.log(error)
+            toast.error(error)
         }
         
     };
+
+    const getDepartments = async () => {
+        try {
+            const {data} = await API.departments();
+
+            console.log(data.data)
+            setDepartments(data.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getDepartments();
+    }, [])
 
     return (
         <div className='p-8 bg-white max-w-[520px] mx-auto'>
@@ -45,7 +64,7 @@ const RegisterForm = () => {
                 <FormInput label={'Employee Number'} placeholder='Enter employee number' register={register} name={'employeeNumber'} errors={errors} />
                 <FormInput label={'ID number'} placeholder='Enter ID number' register={register} name={'idNumber'} errors={errors} />
                 </div>
-                <FormSelect label={'Department'} options={["HR", "HOD", "Staff"]} register={register} name={'departmentId'} errors={errors} />
+                <FormSelect label={'Department'} options={departments} register={register} name={'departmentId'} errors={errors} />
                 <FormInputPassword label={'Password'} placeholder='Enter your password' register={register} name={'password'} errors={errors} />
                 <FormInputPassword label={'Confirm Password'} placeholder='Re-enter your password' register={register} name={'confirmPassword'} errors={errors} />
 

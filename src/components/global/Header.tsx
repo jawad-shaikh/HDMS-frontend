@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Icons } from "./icons";
 import { usePathname } from "next/navigation";
 import API from "@/service/api";
+import { convertDate } from "@/utils/helper";
 
 const Header: React.FC = () => {
   const path = usePathname();
@@ -87,7 +88,7 @@ const Header: React.FC = () => {
                         {notification.description}
                       </q>
                     </div>
-                    <p className="text-xs">19/12/2023</p>
+                    <p className="text-xs">{convertDate(notification.createdAt)}</p>
                   </li>
                 ))}
               </ul>
