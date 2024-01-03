@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { Icons } from '../global/icons';
 
-const Table = ({ data, columns } : any) => {
+const Table = ({ data, columns }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data,
@@ -22,50 +22,51 @@ const Table = ({ data, columns } : any) => {
   });
 
   return (
-    <table className='w-full overflow-auto border border-gray'>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} className='text-sm font-semibold bg-primary'>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id} className='text-white text-left p-4'>
-                {header.isPlaceholder ? null : (
-                  <div
-                    {...{
-                      className: header.column.getCanSort()
-                        ? 'cursor-pointer select-none flex min-w-[36px]'
-                        : '',
-                      onClick: header.column.getToggleSortingHandler(),
-                    }}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                    {
-                      (header.column.id === 'action' || header.column.id === 'status') ? null : {
-                        asc: <span className='pl-2'>↑</span>,
-                        desc: <span className='pl-2'>↓</span>,
-                      }[header.column.getIsSorted() as string] ?? (
-                          <span className='pl-2 flex items-center'>
-                            <Icons.arrows />
-                          </span>
-                        )
-                    }
-                  </div>
-                )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id} className='border-b border-gray'>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id} className='text-sm p-4'>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-      {/* <div className="flex items-center gap-2">
+    <>
+      <table className='w-full overflow-auto border border-gray'>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id} className='text-sm font-semibold bg-primary'>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} className='text-white text-left p-4'>
+                  {header.isPlaceholder ? null : (
+                    <div
+                      {...{
+                        className: header.column.getCanSort()
+                          ? 'cursor-pointer select-none flex min-w-[36px]'
+                          : '',
+                        onClick: header.column.getToggleSortingHandler(),
+                      }}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {
+                        (header.column.id === 'action' || header.column.id === 'status') ? null : {
+                          asc: <span className='pl-2'>↑</span>,
+                          desc: <span className='pl-2'>↓</span>,
+                        }[header.column.getIsSorted() as string] ?? (
+                            <span className='pl-2 flex items-center'>
+                              <Icons.arrows />
+                            </span>
+                          )
+                      }
+                    </div>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id} className='border-b border-gray'>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className='text-sm p-4'>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+        {/* <div className="flex items-center gap-2">
         <button
           className="border rounded p-1"
           onClick={() => table.setPageIndex(0)}
@@ -126,7 +127,16 @@ const Table = ({ data, columns } : any) => {
           ))}
         </select>
       </div> */}
-    </table>
+
+      </table>
+
+      {(data.length <= 0) && <div className='flex flex-col items-center justify-center mt-20'>
+        <Icons.empty className='fill-white' />
+        <p className='test-lg font-semibold mt-4'>No Data</p>
+        <p className='text-sm text-[#9E9E9E] mt-2'>Sorry, data is not available in the table</p>
+      </div>}
+
+    </>
   );
 };
 

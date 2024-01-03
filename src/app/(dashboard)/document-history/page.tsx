@@ -19,7 +19,7 @@ export default function DocumentHistoryPage() {
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [update, setUpdate] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem('user') || '');
+  const user = JSON.parse(window.localStorage.getItem('user') || '');
 
   const columns = [
     columnHelper.accessor('id', {

@@ -1,20 +1,26 @@
 'use client'
 import { site } from '@/data'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icons } from './icons'
 import SideLink from '../ui/SideLink'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 const SideMenu = () => {
   const router = useRouter()
-  const user = JSON.parse(localStorage.getItem('user') || '')
+  const [user, setUser] = useState<any>({});
 
+  
   const logout = () => {
     localStorage.removeItem('token')
     sessionStorage.removeItem('token')
     router.push('/login')
   }
+
+  useEffect(() => {
+      setUser(JSON.parse(window?.localStorage.getItem('user') || ''))
+  }, [])
+  
   return (
     <div className="flex h-screen w-[72px] flex-col justify-between border-e border-gray">
       <div>
@@ -24,7 +30,7 @@ const SideMenu = () => {
 
         <ul className="space-y-3 m-3">
           {
-            user.role === "ADMIN" ? (
+            user?.role === "ADMIN" ? (
               <>
                 <SideLink icon={<Icons.users className=' w-5' />} url="/users" />
                 <SideLink icon={<Icons.department className=' w-5' />} url="/department" />
@@ -33,12 +39,12 @@ const SideMenu = () => {
                 <SideLink icon={<Icons.history className=' w-5' />} url="/document-history" />
                 <SideLink icon={<Icons.error className=' w-5' />} url="/expired-documents" />
               </>
-            ) : user.role === "HR" ? <>
+            ) : user?.role === "HR" ? <>
               <SideLink icon={<Icons.required className=' w-5' />} url="/required-documents" />
               <SideLink icon={<Icons.received className=' w-5' />} url="/received-documents" />
               <SideLink icon={<Icons.history className=' w-5' />} url="/document-history" />
               <SideLink icon={<Icons.error className=' w-5' />} url="/expired-documents" />
-            </> : user.role === "HOD" ? <>
+            </> : user?.role === "HOD" ? <>
               <SideLink icon={<Icons.required className=' w-5' />} url="/required-documents" />
               <SideLink icon={<Icons.upload className=' w-5' />} url="/upload-documents" />
               <SideLink icon={<Icons.history className=' w-5' />} url="/document-history" />

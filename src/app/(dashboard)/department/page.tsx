@@ -35,6 +35,7 @@ export default function DepartmentPage() {
   const [deleteM, setDelete] = useState(false);
 
 
+
   const columns = [
     columnHelper.accessor('id', {
       cell: (info) => info.getValue().toString(),

@@ -7,7 +7,7 @@ import API from '@/service/api'
 import toast from 'react-hot-toast'
 
 const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
-    const user = JSON.parse(localStorage.getItem('user') || '')
+    const user = JSON.parse(window.localStorage.getItem('user') || '')
     const [isApprove, setIsApprove] = useState('');
     const downloadDoc = async (id: string) => {
         try {

@@ -7,9 +7,12 @@ import { convertDate } from "@/utils/helper";
 
 const Header: React.FC = () => {
   const path = usePathname();
-  const user = JSON.parse(localStorage.getItem('user') || '')
+  const [user, setUser] = useState<any>({});
 
   useEffect(() => {
+
+    setUser(JSON.parse(window?.localStorage.getItem('user') || ''))
+
     if (path === "/users") {
       setPage("Users");
     } else if (path === "/department") {

@@ -17,7 +17,7 @@ const columnHelper = createColumnHelper<any>();
 
 export default function RequiredDocumentsPage() {
 
-  const user = JSON.parse(localStorage.getItem('user') || '');
+  const user = JSON.parse(window.localStorage.getItem('user') || '');
   const [documents, setDocuments] = useState([]);
 
   const [document, setDocument] = useState({});
