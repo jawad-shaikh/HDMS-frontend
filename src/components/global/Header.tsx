@@ -20,7 +20,10 @@ const Header: React.FC = () => {
       setPage("Received Documents");
     } else if (path === "/document-history") {
       setPage("Document History");
-    } else {
+    } else if (path === "/upload-documents") {
+      setPage("upload Documents");
+    }
+    else {
       setPage("Expired Documents");
     }
   }, [path]);

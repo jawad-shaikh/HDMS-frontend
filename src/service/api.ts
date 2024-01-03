@@ -8,7 +8,7 @@ interface Credentials {
 
 interface APIInstance extends AxiosInstance {
   login: (credentials: Credentials) => Promise<any>;
-  register: (credentials: Credentials) => Promise<any>;
+  register: (credentials: any) => Promise<any>;
 
   users: () => Promise<any>;
   hods: () => Promise<any>;

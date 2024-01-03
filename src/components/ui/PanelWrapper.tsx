@@ -5,7 +5,6 @@ import { Icons } from '../global/icons'
 import { convertDate } from '@/utils/helper'
 import API from '@/service/api'
 import toast from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
 
 const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
     const user = JSON.parse(localStorage.getItem('user') || '')
@@ -141,11 +140,11 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                                                         ))}
                                                 </ul>
                                             </dd>
-                                            {
+                                            <p className='text-red text-xs mb-6'>after downloading documents, documents will be deleted</p>
+                                            {/* {
                                                 document.status === "PENDING" && <label htmlFor="remember">
                                                     <input disabled checked={!(document?.documents?.length && !document?.documents[0].hasDownloaded)} type="checkbox" name="remember" id="remember" className='mb-6 text-xs' />  Document Received and Downloaded</label>
-
-                                            }
+                                            } */}
                                             {
                                                 document.documentRequest && <div className="border-t border-gray">
                                                     <div className='my-4'>
@@ -224,14 +223,14 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                                                 </ul>
                                             </ details>
 
-                                        {
-                                            isUpdate ?  <div className='flex items-center justify-end mt-16'>
-                                            <button onClick={() => setOpen(false)} type='button' className='py-3 px-10 font-semibold'>Cancel</button>
-                                            <button disabled={isApprove ? false : true} onClick={updateDoc} className='bg-primary py-3 px-10 text-white font-semibold'>Update</button>
-                                        </div>: null
-                                        }
+                                            {
+                                                isUpdate ? <div className='flex items-center justify-end mt-16'>
+                                                    <button onClick={() => setOpen(false)} type='button' className='py-3 px-10 font-semibold'>Cancel</button>
+                                                    <button disabled={isApprove ? false : true} onClick={updateDoc} className='bg-primary py-3 px-10 text-white font-semibold'>Update</button>
+                                                </div> : null
+                                            }
 
-                                           
+
                                         </div>
 
 
