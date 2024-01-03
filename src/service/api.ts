@@ -13,8 +13,8 @@ interface APIInstance extends AxiosInstance {
   users: () => Promise<any>;
   hods: () => Promise<any>;
   createUser: (data: TUser) => Promise<any>;
-  updateUser: (id:string, user: any) => Promise<any>;
-  deleteUser: (id:string) => Promise<any>;
+  updateUser: (id: string, user: any) => Promise<any>;
+  deleteUser: (id: string) => Promise<any>;
 
   departments: () => Promise<any>;
   createDepartment: (department: TDepartment) => Promise<any>;
@@ -29,22 +29,21 @@ interface APIInstance extends AxiosInstance {
   documentHistory: () => Promise<any>;
   expiredHistory: () => Promise<any>;
   departmentExpiredHistory: () => Promise<any>;
-  
+
   submissionDocuments: () => Promise<any>;
   uploadDocument: (data: any) => Promise<any>;
-  updateUploadDocument: (id:string, data: any) => Promise<any>;
+  updateUploadDocument: (id: string, data: any) => Promise<any>;
   downloadDocuments: (id: string) => Promise<any>;
 
-  documentApprove: (id: string) => Promise<any>;  
+  documentApprove: (id: string) => Promise<any>;
   documentReject: (id: string) => Promise<any>;
-  
 
   notifications: () => Promise<any>;
   readNotifications: () => Promise<any>;
 }
 
 const API = axios.create({
-  baseURL: "https://s2wz3vsq-4400.inc1.devtunnels.ms/api/v1",
+  baseURL: "http://89.116.33.124:4400/api/v1",
   timeout: 30000,
   timeoutErrorMessage: "Timeout error",
 }) as APIInstance;
@@ -119,7 +118,7 @@ API.documentHistory = () => {
 API.expiredHistory = () => {
   return API.get(`/documents/expired`);
 };
-API.departmentExpiredHistory= () => {
+API.departmentExpiredHistory = () => {
   return API.get(`/documents/expired?department=true`);
 };
 
@@ -128,24 +127,22 @@ API.submissionDocuments = () => {
 };
 
 API.uploadDocument = (data: any) => {
-  return API.post('/documents/submissions', data)
-}
-API.updateUploadDocument = (id:string,data: any) => {
-  return API.patch(`/documents/submissions/${id}`, data)
-}
+  return API.post("/documents/submissions", data);
+};
+API.updateUploadDocument = (id: string, data: any) => {
+  return API.patch(`/documents/submissions/${id}`, data);
+};
 
-API.downloadDocuments= (id: string) => {
-  return API.get(`/documents/submissions/${id}/docs`)
-}
+API.downloadDocuments = (id: string) => {
+  return API.get(`/documents/submissions/${id}/docs`);
+};
 
 API.documentApprove = (id: string) => {
-  return API.patch(`documents/submissions/${id}/approve`)
-}
+  return API.patch(`documents/submissions/${id}/approve`);
+};
 API.documentReject = (id: string) => {
-  return API.patch(`documents/submissions/${id}/reject`)
-}
-
-
+  return API.patch(`documents/submissions/${id}/reject`);
+};
 
 API.notifications = () => {
   return API.get("/notifications");
@@ -154,7 +151,6 @@ API.notifications = () => {
 API.readNotifications = () => {
   return API.post("notifications/mark-all-as-seen");
 };
-
 
 API.interceptors.request.use(
   (config: any) => {
@@ -181,9 +177,9 @@ API.interceptors.response.use(
     return response;
   },
   (error: any) => {
-    const {data} = error.response
-    if (data.error === "Authorization Token not provided."){
-      window.location.href = '/login'
+    const { data } = error.response;
+    if (data.error === "Authorization Token not provided.") {
+      window.location.href = "/login";
     }
     // Do something with response error
     return Promise.reject(error);
