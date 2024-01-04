@@ -33,9 +33,9 @@ const SideMenu = () => {
           />
           <Image
             src={"/logo.svg"}
-            height={100}
-            width={200}
-            className="hidden group-hover:block"
+            height={32}
+            width={180}
+            className="hidden group-hover:block h-8"
             alt={`${site.name} icon`}
           />
         </div>
