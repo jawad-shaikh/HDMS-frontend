@@ -17,7 +17,6 @@ const columnHelper = createColumnHelper<any>();
 
 export default function RequiredDocumentsPage() {
 
-  const user = JSON.parse(window.localStorage.getItem('user') || '');
   const [documents, setDocuments] = useState([]);
 
   const [document, setDocument] = useState({});
@@ -26,6 +25,9 @@ export default function RequiredDocumentsPage() {
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
   const [deleteM, setDelete] = useState(false);
+
+  const [user, setUser] = useState<any>({});
+
 
   const columns = [
     columnHelper.accessor('id', {
@@ -79,6 +81,10 @@ export default function RequiredDocumentsPage() {
       toast.error(error.message)
     }
   }
+
+  useEffect(() => {
+    setUser(JSON.parse(window.localStorage.getItem('user') || ''))
+  }, [])
 
   useEffect(() => {
     if (!create && !update && !deleteM && !upload) {

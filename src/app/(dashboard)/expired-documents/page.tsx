@@ -19,8 +19,7 @@ export default function ExpiredDocumentsPage() {
   const [document, setDocument] = useState<any>({});
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [update, setUpdate] = useState(false);
-
-  const user = JSON.parse(window.localStorage.getItem('user') || '');
+  const [user, setUser] = useState<any>({});
 
   const columns = [
     columnHelper.accessor('id', {
@@ -90,6 +89,10 @@ export default function ExpiredDocumentsPage() {
       toast.error(error.message)
     }
   }
+
+  useEffect(() => {
+    setUser(JSON.parse(window.localStorage.getItem('user') || ''))
+  }, [])
 
   useEffect(() => {
     fetchDocuments()

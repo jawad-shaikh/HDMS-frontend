@@ -4,25 +4,33 @@ import {
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
+  getFilteredRowModel,
   SortingState,
 } from '@tanstack/react-table';
 import { Icons } from '../global/icons';
 
 const Table = ({ data, columns }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [search, setSearch] = useState<any>('');
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
       sorting,
+      globalFilter: search
     },
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+
+    getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setSearch,
   });
 
   return (
     <>
+    <input type="text" value={search} onChange={e => setSearch(e.target.value)} />
       <table className='w-full overflow-auto border border-gray'>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

@@ -18,8 +18,8 @@ export default function DocumentHistoryPage() {
   const [document, setDocument] = useState<any>({});
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [user, setUser] = useState<any>({});
 
-  const user = JSON.parse(window.localStorage.getItem('user') || '');
 
   const columns = [
     columnHelper.accessor('id', {
@@ -96,6 +96,12 @@ export default function DocumentHistoryPage() {
       toast.error(error.message)
     }
   }
+
+
+  useEffect(() => {
+    setUser(JSON.parse(window.localStorage.getItem('user') || ''))
+  }, [])
+
 
   useEffect(() => {
     fetchDocuments()

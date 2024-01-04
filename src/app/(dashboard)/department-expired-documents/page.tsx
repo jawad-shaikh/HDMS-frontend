@@ -20,8 +20,6 @@ export default function ExpiredDocumentsPage() {
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [update, setUpdate] = useState(false);
 
-  const user = JSON.parse(window.localStorage.getItem('user') || '');
-
   const columns = [
     columnHelper.accessor('id', {
       cell: (info) => info.getValue().toString(),
