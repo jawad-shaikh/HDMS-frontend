@@ -11,10 +11,9 @@ import { Icons } from '@/components/global/icons'
 
 
 const EditRequiredDocumentModal: React.FC<any> = ({defaultValue, closeModal}) => {
-    const [users, setUsers] = useState([])
     const [isRepeated, setIsRepeated] = useState(defaultValue.isRepeated);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<TRequiredDocument>({
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<TRequiredDocument>({
         resolver: yupResolver(requiredDocumentSchema),
         defaultValues: defaultValue
     });
@@ -30,22 +29,9 @@ const EditRequiredDocumentModal: React.FC<any> = ({defaultValue, closeModal}) =>
         }
     };
 
-    // const fetchUsers = async () => {
-    //     try {
-    //       const {data} = await API.hods();
-    //       setUsers(data.data.map(({ id, firstName, lastName }: {id:number, firstName: string, lastName: string}) => ({ id, name: `${firstName} ${lastName}` })))
-    //     } catch (error: any) {
-    //       toast.error(error.message)
-    //     }
-    //   }
-    
-    //   useEffect(() => {
-    //     fetchUsers()
-    //   }, [])
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <FormSelect label={'Document Type'} options={[{ id: "NORMAL", name: "Normal" }, { id: "QUESTION", name: "Question" }]} register={register} name={'documentType'} errors={errors} />
+            <FormSelect label={'Document Type'} options={[{ id: "NORMAL", name: "Document" }, { id: "QUESTION", name: "Question" }]} register={register} name={'documentType'} errors={errors} />
             <FormInput label={'Title'} placeholder='Enter title document' register={register} name={'title'} errors={errors} />
 
             <div className='mb-4'>
@@ -59,7 +45,7 @@ const EditRequiredDocumentModal: React.FC<any> = ({defaultValue, closeModal}) =>
                 }
             </div>
             <label htmlFor="isRepeated">
-                <input type="checkbox" name="isRepeated" id="isRepeated" checked={isRepeated} onChange={() => setIsRepeated(!isRepeated)} />  Repeated </label>
+                <input type="checkbox" disabled={watch('documentType') === "QUESTION"} name="isRepeated" id="isRepeated" checked={isRepeated} onChange={() => setIsRepeated(!isRepeated)} />  Repeated </label>
 
 
             <div className='flex items-center justify-end mt-16'>

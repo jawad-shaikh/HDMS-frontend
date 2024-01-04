@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Icons } from "./icons";
 import { usePathname } from "next/navigation";
 import API from "@/service/api";
@@ -7,7 +7,24 @@ import { convertDate } from "@/utils/helper";
 
 const Header: React.FC = () => {
   const path = usePathname();
+  const notificationBoxRef = useRef<any>(null);
   const [user, setUser] = useState<any>({});
+
+  const [page, setPage] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const [notifications, setNotifications] = useState<any>([]);
+
+  const fetchNotifications = async () => {
+    const { data } = await API.notifications()
+    setNotifications(data.data)
+  }
+
+  const readNotifications = async () => {
+    await API.readNotifications();
+    fetchNotifications();
+    setShowNotification(false);
+  };
+
 
   useEffect(() => {
 
@@ -31,20 +48,19 @@ const Header: React.FC = () => {
     }
   }, [path]);
 
-  const [page, setPage] = useState("");
-  const [showNotification, setShowNotification] = useState(false);
-  const [notifications, setNotifications] = useState<any>([]);
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (notificationBoxRef.current && !notificationBoxRef.current.contains(event.target)) {
+        setShowNotification(false);
+      }
+    };
 
-  const fetchNotifications = async () => {
-    const { data } = await API.notifications()
-    setNotifications(data.data)
-  }
+    document.addEventListener('mousedown', handleClickOutside);
 
-  const readNotifications = async () => {
-    await API.readNotifications();
-    fetchNotifications();
-    setShowNotification(false);
-  };
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     fetchNotifications()
@@ -58,7 +74,7 @@ const Header: React.FC = () => {
       <div className="flex items-center gap-4">
         <div className="relative">
           {showNotification && (
-            <div className="absolute bg-white border border-gray right-0 top-16 p-4 w-[480px] h-[600px] overflow-scroll">
+            <div ref={notificationBoxRef} className="absolute bg-white border border-gray right-0 top-16 p-4 w-[480px] h-[600px] overflow-scroll">
               <div className="flex items-center justify-between text-sm mb-4">
                 <p className="flex items-center justify-center font-semibold">
                   Notifications{" "}

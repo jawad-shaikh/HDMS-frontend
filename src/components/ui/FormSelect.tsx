@@ -5,8 +5,8 @@ const FormSelect: React.FC<any> = ({ register, name, errors, label, options }) =
   return (
     <div className='mb-4'>
       <label className='block mb-2 text-sm' htmlFor={name}>{label}</label>
-      <select id={name} className='block border-2 border-gray w-full p-2 outline-none' {...register(name)} aria-invalid={errors[name] ? "true" : "false"}>
-        <option disabled selected value=""> Select {label}</option>
+      <select id={name} defaultValue={""} className='block border-2 border-gray w-full p-2 outline-none' {...register(name)} aria-invalid={errors[name] ? "true" : "false"}>
+        <option disabled value={""}> Select {label}</option>
         {
           options?.map((object: any, index: number) => (
             <option key={index} value={object.id}>{object.name}</option>

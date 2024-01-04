@@ -5,6 +5,7 @@ export type IconProps = React.HTMLAttributes<SVGElement>
 export type SideLinkProps = {
     icon: ReactNode;
     url: string;
+    name: string;
 }
 
 export type InputProps = {

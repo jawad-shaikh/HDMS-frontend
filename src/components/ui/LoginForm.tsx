@@ -42,7 +42,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className='p-8 bg-white max-w-[520px] mx-auto'>
+        <div className='p-8 bg-white max-w-[520px] mx-auto form-shadow'>
             <h1 className='mb-6 text-3xl font-semibold'>Login</h1>
             <p className='mb-12'>Sign in into your account</p>
             <form onSubmit={handleSubmit(onSubmit)}>

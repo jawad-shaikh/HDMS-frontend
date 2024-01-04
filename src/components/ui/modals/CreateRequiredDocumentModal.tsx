@@ -12,10 +12,9 @@ import { Icons } from '@/components/global/icons'
 
 
 const CreateRequiredDocumentModal: React.FC<any> = ({ closeModal }) => {
-    const [departments, setDepartments] = useState([]);
     const [isRepeated, setIsRepeated] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<TRequiredDocument>({
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<TRequiredDocument>({
         resolver: yupResolver(requiredDocumentSchema)
     });
 
@@ -30,24 +29,9 @@ const CreateRequiredDocumentModal: React.FC<any> = ({ closeModal }) => {
         }
     };
 
-    // const getDepartments = async () => {
-    //     try {
-    //         const { data } = await API.creat();
-
-    //         console.log(data.data)
-    //         setDepartments(data.data)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     getDepartments();
-    // }, [])
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <FormSelect label={'Document Type'} options={[{ id: "NORMAL", name: "Normal" }, { id: "QUESTION", name: "Question" }]} register={register} name={'documentType'} errors={errors} />
+            <FormSelect label={'Document Type'} options={[{ id: "NORMAL", name: "Document" }, { id: "QUESTION", name: "Question" }]} register={register} name={'documentType'} errors={errors} />
             <FormInput label={'Title'} placeholder='Enter title document' register={register} name={'title'} errors={errors} />
 
             <div className='mb-4'>
@@ -61,7 +45,7 @@ const CreateRequiredDocumentModal: React.FC<any> = ({ closeModal }) => {
                 }
             </div>
             <label htmlFor="isRepeated">
-                <input type="checkbox" name="isRepeated" id="isRepeated" onChange={() => setIsRepeated(!isRepeated)} />  Repeated </label>
+                <input type="checkbox" disabled={watch('documentType') === "QUESTION"} name="isRepeated" id="isRepeated" onChange={() => setIsRepeated(!isRepeated)} />  Repeated </label>
 
 
             <div className='flex items-center justify-end mt-16'>

@@ -25,22 +25,25 @@ const RegisterForm = () => {
 
     const onSubmit = async(credential: RegisterForm) => {
        const {confirmPassword, departmentId, ...data} = credential;
-       console.log(credential, data);
         try {
-            await API.register({...data, departmentId: Number(departmentId)});
+            await toast.promise(
+                API.register({...data, departmentId: Number(departmentId)}),
+                {
+                    loading: 'Please wait...',
+                    success: 'Registered successfully',
+                    error: (error: any) => `Failed to Registered.`,
+                }
+            );
             router.push('/login')
         } catch (error: any) {
             console.log(error)
             toast.error(error)
         }
-        
     };
 
     const getDepartments = async () => {
         try {
             const {data} = await API.departments();
-
-            console.log(data.data)
             setDepartments(data.data)
         } catch (error) {
             console.log(error)
@@ -52,7 +55,7 @@ const RegisterForm = () => {
     }, [])
 
     return (
-        <div className='p-8 bg-white max-w-[520px] mx-auto'>
+        <div className='p-8 bg-white max-w-[520px] form-shadow mx-auto'>
             <h1 className='mb-6 text-3xl font-semibold'>Register</h1>
             <p className='mb-12'>Create new account</p>
 
