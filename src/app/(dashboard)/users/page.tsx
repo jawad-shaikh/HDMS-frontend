@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import PageTitle from "@/components/global/PageTitle";
 import { Icons } from "@/components/global/icons";
 import ModalWrapper from "@/components/ui/ModalWrapper";
@@ -32,7 +32,6 @@ type Person = {
 
 const columnHelper = createColumnHelper<Person>();
 
-
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
 
@@ -41,84 +40,100 @@ export default function UsersPage() {
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
   const [deleteM, setDelete] = useState(false);
- 
+
   const columns = [
-    columnHelper.accessor('id', {
+    columnHelper.accessor("id", {
       cell: (info) => info.getValue().toString(),
-      header: () => 'ID',
+      header: () => "ID",
     }),
     columnHelper.accessor((row) => `${row.firstName} ${row.lastName}`, {
       id: "fullName",
       header: "Name",
     }),
-    columnHelper.accessor('employeeNumber', {
+    columnHelper.accessor("employeeNumber", {
       cell: (info) => info.getValue(),
-      header: 'Employee Number',
+      header: "Employee Number",
     }),
-    columnHelper.accessor((row) => row.department ? `${row.department.name}` : '-', {
-      id: "department",
-      header: "Department",
-    }),
-    columnHelper.accessor('email', {
+    columnHelper.accessor(
+      (row) => (row.department ? `${row.department.name}` : "-"),
+      {
+        id: "department",
+        header: "Department",
+      },
+    ),
+    columnHelper.accessor("email", {
       cell: (info) => <i>{info.getValue()}</i>,
-      header: 'Email',
+      header: "Email",
     }),
-    columnHelper.accessor('updatedAt', {
+    columnHelper.accessor("updatedAt", {
       cell: (info) => convertDate(info.getValue()),
-      header: 'Last Update',
+      header: "Last Update",
     }),
     columnHelper.display({
       id: "action",
-      header: () => 'Action',
-      cell: props => <div className="flex items-center gap-4">
-        <button onClick={() => {
-          setUser(props.row.original)
-          setUpdate(true)
-          }}>
-          <Icons.edit className="text-blue-500 w-5 h-5" />
-        </button>
-        <button onClick={() => {
-          setUser(props.row.original)
-          setDelete(true)
-          }}>
-          <Icons.trash className="text-red-500 w-6 h-6" />
-        </button>
-      </div>,
+      header: () => "Action",
+      cell: (props) => (
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => {
+              setUser(props.row.original);
+              setUpdate(true);
+            }}
+          >
+            <Icons.edit className="text-blue-500 w-5 h-5" />
+          </button>
+          <button
+            onClick={() => {
+              setUser(props.row.original);
+              setDelete(true);
+            }}
+          >
+            <Icons.trash className="text-red-500 w-6 h-6" />
+          </button>
+        </div>
+      ),
     }),
     // Add more columns as needed
   ];
 
-
   const fetchUsers = async () => {
     try {
-      const {data} = await API.users();
-      setUsers(data.data)
+      const { data } = await API.users();
+      setUsers(data.data);
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchUsers()
-  }, [create, update, deleteM])
-  
+    fetchUsers();
+  }, [create, update, deleteM]);
 
   return (
     <>
-      <PageTitle title={"Users"} icon={<Icons.users className="w-8 h-8" />} buttonText="Add New User" onClick={() => setCreate(true)} />
+      <title>Users - HDMS</title>
+      <PageTitle
+        title={"Users"}
+        icon={<Icons.users className="w-8 h-8" />}
+        buttonText="Add New User"
+        onClick={() => setCreate(true)}
+      />
       <Table data={users} columns={columns} />
-      
+
       <ModalWrapper title="Create New User" open={create} setOpen={setCreate}>
         <CreateUserModal closeModal={() => setCreate(false)} />
       </ModalWrapper>
 
       <ModalWrapper title="Edit User" open={update} setOpen={setUpdate}>
-        <EditUserModal defaultValue={user} closeModal={() => setUpdate(false)}  />
+        <EditUserModal
+          defaultValue={user}
+          closeModal={() => setUpdate(false)}
+        />
       </ModalWrapper>
 
       <ModalWrapper title="Delete User" open={deleteM} setOpen={setDelete}>
         <DeleteUserModal data={user} closeModal={() => setDelete(false)} />
       </ModalWrapper>
     </>
-  )
+  );
 }

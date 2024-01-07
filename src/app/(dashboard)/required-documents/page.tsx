@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import PageTitle from "@/components/global/PageTitle";
 import { Icons } from "@/components/global/icons";
 import ModalWrapper from "@/components/ui/ModalWrapper";
@@ -16,7 +16,6 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function RequiredDocumentsPage() {
-
   const [documents, setDocuments] = useState([]);
 
   const [document, setDocument] = useState({});
@@ -28,47 +27,55 @@ export default function RequiredDocumentsPage() {
 
   const [user, setUser] = useState<any>({});
 
-
   const columns = [
-    columnHelper.accessor('id', {
+    columnHelper.accessor("id", {
       cell: (info) => info.getValue().toString(),
-      header: () => 'ID',
+      header: () => "ID",
     }),
-    columnHelper.accessor('title', {
+    columnHelper.accessor("title", {
       cell: (info) => info.getValue(),
-      header: 'Title',
+      header: "Title",
     }),
-    columnHelper.accessor('createdAt', {
+    columnHelper.accessor("createdAt", {
       cell: (info) => convertDate(info.getValue()),
-      header: 'Requested Date',
+      header: "Requested Date",
     }),
     columnHelper.display({
       id: "action",
-      header: () => 'Action',
-      cell: props => <div className="flex items-center gap-4">
-        {user.role === "ADMIN" || user.role === "HR" ?
-          <>
-            <button onClick={() => {
-              setDocument(props.row.original)
-              setUpdate(true)
-            }}>
-              <Icons.edit className="text-blue-500 w-5 h-5" />
+      header: () => "Action",
+      cell: (props) => (
+        <div className="flex items-center gap-4">
+          {user.role === "ADMIN" || user.role === "HR" ? (
+            <>
+              <button
+                onClick={() => {
+                  setDocument(props.row.original);
+                  setUpdate(true);
+                }}
+              >
+                <Icons.edit className="text-blue-500 w-5 h-5" />
+              </button>
+              <button
+                onClick={() => {
+                  setDocument(props.row.original);
+                  setDelete(true);
+                }}
+              >
+                <Icons.trash className="text-red-500 w-6 h-6" />
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => {
+                setDocument(props.row.original);
+                setUpload(true);
+              }}
+            >
+              <Icons.upload className="text-green-500 w-5 h-5" />
             </button>
-            <button onClick={() => {
-              setDocument(props.row.original)
-              setDelete(true)
-            }}>
-              <Icons.trash className="text-red-500 w-6 h-6" />
-            </button></> :
-          <button onClick={() => {
-            setDocument(props.row.original)
-            setUpload(true)
-          }}>
-            <Icons.upload className="text-green-500 w-5 h-5" />
-          </button>
-
-        }
-      </div>,
+          )}
+        </div>
+      ),
     }),
     // Add more columns as needed
   ];
@@ -76,48 +83,76 @@ export default function RequiredDocumentsPage() {
   const fetchDocuments = async () => {
     try {
       const { data } = await API.requiredDocuments();
-      setDocuments(data.data)
+      setDocuments(data.data);
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }
+  };
 
   useEffect(() => {
-    setUser(JSON.parse(window.localStorage.getItem('user') || ''))
-  }, [])
+    setUser(JSON.parse(window.localStorage.getItem("user") || ""));
+  }, []);
 
   useEffect(() => {
     if (!create && !update && !deleteM && !upload) {
-      fetchDocuments()
+      fetchDocuments();
     }
-  }, [create, update, deleteM, upload])
-
+  }, [create, update, deleteM, upload]);
 
   return (
     <>
-
-      {
-        user.role === "ADMIN" || user.role === "HR" ? <PageTitle title={"Required Documents"} icon={<Icons.required className="w-8 h-8" />} buttonText="Add Document" onClick={() => setCreate(true)} />
-          : <PageTitle title={"Required Documents"} icon={<Icons.required className="w-8 h-8" />} />
-
-      }
+      <title>Required Departments - HDMS</title>
+      {user.role === "ADMIN" || user.role === "HR" ? (
+        <PageTitle
+          title={"Required Documents"}
+          icon={<Icons.required className="w-8 h-8" />}
+          buttonText="Add Document"
+          onClick={() => setCreate(true)}
+        />
+      ) : (
+        <PageTitle
+          title={"Required Documents"}
+          icon={<Icons.required className="w-8 h-8" />}
+        />
+      )}
       <Table data={documents} columns={columns} />
 
-      <ModalWrapper title="Create New Document" open={create} setOpen={setCreate}>
+      <ModalWrapper
+        title="Create New Document"
+        open={create}
+        setOpen={setCreate}
+      >
         <CreateRequiredDocumentModal closeModal={() => setCreate(false)} />
       </ModalWrapper>
 
-      <ModalWrapper title="Edit Required Documents Form" open={update} setOpen={setUpdate}>
-        <EditRequiredDocumentModal defaultValue={document} closeModal={() => setUpdate(false)} />
+      <ModalWrapper
+        title="Edit Required Documents Form"
+        open={update}
+        setOpen={setUpdate}
+      >
+        <EditRequiredDocumentModal
+          defaultValue={document}
+          closeModal={() => setUpdate(false)}
+        />
       </ModalWrapper>
 
       <ModalWrapper title="Delete Document?" open={deleteM} setOpen={setDelete}>
-        <DeleteRequiredDocumentModal data={document} closeModal={() => setDelete(false)} />
+        <DeleteRequiredDocumentModal
+          data={document}
+          closeModal={() => setDelete(false)}
+        />
       </ModalWrapper>
 
-      <ModalWrapper title="Upload Documents Form" open={upload} setOpen={setUpload}>
-        <UploadDocumentModal data={document} closeModal={() => setUpload(false)} />
+      <ModalWrapper
+        title="Upload Documents Form"
+        open={upload}
+        setOpen={setUpload}
+      >
+        <UploadDocumentModal
+          data={document}
+          closeModal={() => setUpload(false)}
+        />
       </ModalWrapper>
     </>
-  )
+  );
 }

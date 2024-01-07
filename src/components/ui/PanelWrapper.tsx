@@ -2,7 +2,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Icons } from "../global/icons";
-import { convertDate } from "@/utils/helper";
+import { convertDate, formatTime } from "@/utils/helper";
 import API from "@/service/api";
 import toast from "react-hot-toast";
 
@@ -78,7 +78,7 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
+                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-[664px]">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
@@ -88,16 +88,33 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
-                      <button
-                        type="button"
-                        className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                        onClick={() => setOpen(false)}
-                      >
+                    <div className="absolute right-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
+                      <button type="button" onClick={() => setOpen(false)}>
                         <span className="absolute -inset-2.5" />
                         <span className="sr-only">Close panel</span>
                         {/* <XMarkIcon className="h-6 w-6" aria-hidden="true" /> */}
-                        x
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="32"
+                          viewBox="0 0 32 32"
+                          fill="none"
+                        >
+                          <path
+                            d="M20 12L12 20M12 12L19.9999 20"
+                            stroke="#404040"
+                            stroke-width="2.4"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            d="M4 16C4 10.3431 4 7.51472 5.75736 5.75736C7.51472 4 10.3431 4 16 4C21.6569 4 24.4853 4 26.2426 5.75736C28 7.51472 28 10.3431 28 16C28 21.6569 28 24.4853 26.2426 26.2426C24.4853 28 21.6569 28 16 28C10.3431 28 7.51472 28 5.75736 26.2426C4 24.4853 4 21.6569 4 16Z"
+                            stroke="#404040"
+                            stroke-width="2.4"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
                       </button>
                     </div>
                   </Transition.Child>
@@ -117,7 +134,7 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
 
                       <dd className="mt-2 text-sm text-[#616161] sm:col-span-2 sm:mt-0 border border-gray mb-4">
                         <div className="flex items-center justify-between p-4 border-b border-gray">
-                          <h4 className="font-semibold">Attached Documents</h4>
+                          <h4 className="font-bold">Attached Documents</h4>
                           {document?.documents?.length &&
                             !document?.documents[0].hasDownloaded &&
                             (user.role === "ADMIN" || user.role === "HR") && (
@@ -199,7 +216,7 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                                 className="block border-2 border-gray w-full p-2 outline-none"
                                 disabled
                                 value={convertDate(
-                                  document.documentRequest.updatedAt
+                                  document.documentRequest.updatedAt,
                                 )}
                               />
                             </div>
@@ -266,14 +283,23 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                                 </svg>
 
                                 <div>
-                                  <p className="text-sm font-semibold">
-                                    {history.action}
+                                  <p className="text-sm">
+                                    {history.action.split("'")[0]}{" "}
+                                    <span className="font-semibold text-primary">
+                                      {" "}
+                                      {history.action.split("'")[1]}{" "}
+                                    </span>
                                   </p>
                                   {/* <q className='text-xs mt-2 block'>notification.description</q> */}
                                 </div>
-                                <p className="text-xs">
-                                  {convertDate(history.createdAt)}
-                                </p>
+                                <div>
+                                  <p className="text-xs">
+                                    {convertDate(history.createdAt)}
+                                  </p>
+                                  <p className="text-xs">
+                                    {formatTime(history.createdAt)}
+                                  </p>
+                                </div>
                               </li>
                             ))
                             .reverse()}
@@ -288,13 +314,22 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                               xmlns="http://www.w3.org/2000/svg"
                             >
                               <circle cx="12" cy="12" r="6" fill="#004AAB" />
-                              <path d="M12 28V84" stroke="#004AAB" />
                             </svg>
+
                             <div>
-                              <p className="text-sm font-semibold">
+                              <p className="text-sm">
                                 Requested document by{" "}
-                                {document.documentRequest?.createdBy?.firstName}{" "}
-                                {document.documentRequest?.createdBy?.lastName}
+                                <span className="font-semibold text-primary">
+                                  {" "}
+                                  {
+                                    document.documentRequest?.createdBy
+                                      ?.firstName
+                                  }{" "}
+                                  {
+                                    document.documentRequest?.createdBy
+                                      ?.lastName
+                                  }
+                                </span>
                               </p>
                               {/* <q className='text-xs mt-2 block'>notification.description</q> */}
                             </div>

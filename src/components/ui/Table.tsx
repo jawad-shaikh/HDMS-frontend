@@ -73,7 +73,7 @@ const Table = ({ data, columns }: any) => {
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                       {header.column.id === "action" ||
                       header.column.id === "status"

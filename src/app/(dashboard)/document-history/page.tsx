@@ -30,14 +30,14 @@ export default function DocumentHistoryPage() {
       {
         id: "name",
         header: "Name",
-      }
+      },
     ),
     columnHelper.accessor(
       (row) => (row.user ? `${row.user.employeeNumber}` : "-"),
       {
         id: "noEmployee",
         header: "No Employee",
-      }
+      },
     ),
     columnHelper.accessor((row) => (row.user ? `${row.user.idNumber}` : "-"), {
       id: "noId",
@@ -48,7 +48,7 @@ export default function DocumentHistoryPage() {
       {
         id: "title",
         header: "Title",
-      }
+      },
     ),
     columnHelper.accessor(
       (row) =>
@@ -58,7 +58,7 @@ export default function DocumentHistoryPage() {
       {
         id: "hrEmployee",
         header: "HR Employee",
-      }
+      },
     ),
 
     columnHelper.accessor("updatedAt", {
@@ -74,12 +74,12 @@ export default function DocumentHistoryPage() {
       header: () => "status",
       cell: (props) => (
         <p
-          className={`px-4 py-2 text-center border ${
+          className={`px-4 py-2 text-center border-2 rounded-md font-semibold ${
             props.row.original.status === "PENDING"
               ? "border-black/50 text-black/50"
               : props.row.original.status === "REJECTED"
-              ? "border-red text-red"
-              : "border-primary text-primary"
+                ? "border-red text-red bg-red/20"
+                : "border-[#43936C] text-[#43936C] bg-[#43936C]/20"
           } `}
         >
           {props.row.original.status}
@@ -135,6 +135,7 @@ export default function DocumentHistoryPage() {
 
   return (
     <>
+      <title>History Departments - HDMS</title>
       <PageTitle
         title={"Document History"}
         icon={<Icons.history className="w-8 h-8" />}

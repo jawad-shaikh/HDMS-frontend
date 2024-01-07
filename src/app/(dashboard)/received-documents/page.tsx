@@ -21,72 +21,92 @@ export default function ReceivedDocumentsPage() {
       cell: (info) => info.getValue().toString(),
       header: () => "No",
     }),
-    columnHelper.accessor((row) => row.user ? `${row.user.firstName} ${row.user.lastName}` : '-', {
-      id: "name",
-      header: "Name",
-    }),
+    columnHelper.accessor(
+      (row) => (row.user ? `${row.user.firstName} ${row.user.lastName}` : "-"),
+      {
+        id: "name",
+        header: "Name",
+      },
+    ),
 
-    columnHelper.accessor((row) => row.user ? `${row.user.employeeNumber}` : '-', {
-      id: "employeeNumber",
-      header: "No Employee",
-    }),
+    columnHelper.accessor(
+      (row) => (row.user ? `${row.user.employeeNumber}` : "-"),
+      {
+        id: "employeeNumber",
+        header: "No Employee",
+      },
+    ),
 
-    columnHelper.accessor((row) => row.user ? `${row.user.idNumber}` : '-', {
+    columnHelper.accessor((row) => (row.user ? `${row.user.idNumber}` : "-"), {
       id: "idNumber",
       header: "No ID",
     }),
 
-    columnHelper.accessor((row) => row.documentRequest ? `${row.documentRequest.title}` : '-', {
-      id: "title",
-      header: "Title",
-    }),
+    columnHelper.accessor(
+      (row) => (row.documentRequest ? `${row.documentRequest.title}` : "-"),
+      {
+        id: "title",
+        header: "Title",
+      },
+    ),
 
-
-    columnHelper.accessor('updatedAt', {
+    columnHelper.accessor("updatedAt", {
       cell: (info) => convertDate(info.getValue()),
       header: "Upload Date",
     }),
-    columnHelper.accessor('expireDate', {
-      cell: (info) => info.getValue() ? convertDate(info.getValue()) : '-',
-      header: 'Expiry Date',
+    columnHelper.accessor("expireDate", {
+      cell: (info) => (info.getValue() ? convertDate(info.getValue()) : "-"),
+      header: "Expiry Date",
     }),
 
     columnHelper.display({
       id: "action",
-      header: () => 'Action',
-      cell: props => <button onClick={() => {
-        setDocument(props.row.original)
-        setPanelOpen(true)
-      }}>
-        <Icons.eye />
-      </button>,
+      header: () => "Action",
+      cell: (props) => (
+        <button
+          onClick={() => {
+            setDocument(props.row.original);
+            setPanelOpen(true);
+          }}
+        >
+          <Icons.eye />
+        </button>
+      ),
     }),
   ];
 
   const fetchDocuments = async () => {
     try {
       const { data } = await API.submissionDocuments();
-      setDocuments(data.data)
+      setDocuments(data.data);
     } catch (error: any) {
       toast.error(error.message);
     }
-  }
-  
+  };
+
   useEffect(() => {
-    if(!isPanelOpen){
-      fetchDocuments()
-
+    if (!isPanelOpen) {
+      fetchDocuments();
     }
-  }, [isPanelOpen])
-
+  }, [isPanelOpen]);
 
   return (
     <>
-      <PageTitle title={"Received Documents"} icon={<Icons.received className="w-8 h-8" />} />
+      <title>Received Departments - HDMS</title>
+      <PageTitle
+        title={"Received Documents"}
+        icon={<Icons.received className="w-8 h-8" />}
+      />
       <Table data={documents} columns={columns} />
 
       {document ? (
-      <PanelWrapper open={isPanelOpen} setOpen={setPanelOpen} title={'Detail Document'} isUpdate={true} document={document} />
+        <PanelWrapper
+          open={isPanelOpen}
+          setOpen={setPanelOpen}
+          title={"Detail Document"}
+          isUpdate={true}
+          document={document}
+        />
       ) : null}
     </>
   );

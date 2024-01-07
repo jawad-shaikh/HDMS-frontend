@@ -1,15 +1,14 @@
-import { Dialog, Transition } from '@headlessui/react'
-import React, { Fragment, useState } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import React, { Fragment, useState } from "react";
 
 type TWrapperModal = {
   title: string;
   children: React.ReactElement;
   open: boolean;
   setOpen: (boolean: boolean) => void;
-}
+};
 
-const ModalWrapper = ({children, title, open, setOpen}: TWrapperModal) => {
-
+const ModalWrapper = ({ children, title, open, setOpen }: TWrapperModal) => {
   function closeModal() {
     setOpen(false);
   }
@@ -56,7 +55,7 @@ const ModalWrapper = ({children, title, open, setOpen}: TWrapperModal) => {
         </Dialog>
       </Transition>
     </>
-  )
-}
+  );
+};
 
 export default ModalWrapper;

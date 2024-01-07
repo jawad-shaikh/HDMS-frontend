@@ -11,3 +11,13 @@ export const convertDate = (originalDate: string): string => {
 
   return `${formattedMonth}/${formattedDay}/${year}`;
 };
+
+export function formatTime(originalDate: string) {
+  const date = new Date(originalDate);
+
+  return date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}

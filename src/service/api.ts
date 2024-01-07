@@ -43,7 +43,7 @@ interface APIInstance extends AxiosInstance {
 }
 
 const API = axios.create({
-  baseURL: "http://89.116.33.124:4400/api/v1",
+  baseURL: "https://s2wz3vsq-4400.inc1.devtunnels.ms/api/v1",
   timeout: 30000,
   timeoutErrorMessage: "Timeout error",
 }) as APIInstance;
@@ -168,7 +168,7 @@ API.interceptors.request.use(
   (error: AxiosError) => {
     // Do something with request error
     return Promise.reject(error);
-  }
+  },
 );
 
 API.interceptors.response.use(
@@ -183,7 +183,7 @@ API.interceptors.response.use(
     }
     // Do something with response error
     return Promise.reject(error);
-  }
+  },
 );
 
 export default API;

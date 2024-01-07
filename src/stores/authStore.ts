@@ -1,5 +1,5 @@
 // authStore.js
-import {create} from 'zustand';
+import { create } from "zustand";
 
 // interface AuthStore {
 //   user: { username: string } | null;
