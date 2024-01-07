@@ -33,7 +33,7 @@ interface APIInstance extends AxiosInstance {
   submissionDocuments: () => Promise<any>;
   uploadDocument: (data: any) => Promise<any>;
   updateUploadDocument: (id: string, data: any) => Promise<any>;
-  downloadDocuments: (id: string) => Promise<any>;
+  downloadDocuments: (id: string, query: any) => Promise<any>;
 
   documentApprove: (id: string) => Promise<any>;
   documentReject: (id: string) => Promise<any>;
@@ -133,8 +133,8 @@ API.updateUploadDocument = (id: string, data: any) => {
   return API.patch(`/documents/submissions/${id}`, data);
 };
 
-API.downloadDocuments = (id: string) => {
-  return API.get(`/documents/submissions/${id}/docs`);
+API.downloadDocuments = (id: string, query?: any) => {
+  return API.get(`/documents/submissions/${id}/docs${query}`);
 };
 
 API.documentApprove = (id: string) => {

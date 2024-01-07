@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function ReceivedDocumentsPage() {
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState();
   const [document, setDocument] = useState<any>({});
   const [isPanelOpen, setPanelOpen] = useState(false);
 

@@ -33,7 +33,7 @@ type Person = {
 const columnHelper = createColumnHelper<Person>();
 
 export default function UsersPage() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState();
 
   const [user, setUser] = useState({});
 
@@ -62,7 +62,7 @@ export default function UsersPage() {
       },
     ),
     columnHelper.accessor("email", {
-      cell: (info) => <i>{info.getValue()}</i>,
+      cell: (info) => info.getValue(),
       header: "Email",
     }),
     columnHelper.accessor("updatedAt", {

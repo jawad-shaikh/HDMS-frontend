@@ -19,11 +19,11 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: yupResolver(loginSchema),
   });
-
   const onSubmit = async (credential: LoginForm) => {
     try {
       const {
@@ -65,16 +65,18 @@ const LoginForm = () => {
           name={"password"}
           errors={errors}
         />
-        <label htmlFor="remember">
+        <label htmlFor="remember" className="inline-flex items-center gap-2">
           <input
             onChange={() => setIsRemember(!isRemember)}
             type="checkbox"
             name="remember"
             id="remember"
           />{" "}
+          <span>
           Remember Me{" "}
+          </span>
         </label>
-        <button className="bg-primary w-full mt-8 mb-6 py-3 text-white font-semibold">
+        <button disabled={!(watch('email') && watch('password')) ? true : false} className="bg-primary disabled:bg-gray w-full mt-8 mb-6 py-3 text-white font-semibold">
           Login
         </button>
       </form>

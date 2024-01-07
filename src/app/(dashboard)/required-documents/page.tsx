@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function RequiredDocumentsPage() {
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState();
 
   const [document, setDocument] = useState({});
 

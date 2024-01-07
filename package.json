@@ -13,6 +13,8 @@
     "@hookform/resolvers": "^3.3.2",
     "@tanstack/react-table": "^8.11.2",
     "axios": "^1.6.3",
+    "byte-size": "^8.1.1",
+    "file-saver": "^2.0.5",
     "jsonwebtoken": "^9.0.2",
     "next": "14.0.4",
     "react": "^18",
@@ -23,6 +25,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/byte-size": "^8.1.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

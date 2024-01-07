@@ -19,6 +19,7 @@ const RegisterForm = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<RegisterForm>({
     resolver: yupResolver(registerSchema),
@@ -122,7 +123,7 @@ const RegisterForm = () => {
 
         {/* <label htmlFor="remember">
                     <input type="checkbox" name="remember" id="remember" />  I have read and agree to the </label> */}
-        <button className="bg-primary w-full mt-8 mb-6 py-3 text-white font-semibold">
+        <button disabled={!(watch('firstName') && watch('lastName') && watch('email') && watch('employeeNumber') && watch ('idNumber') && watch('departmentId') && watch('password') && watch('confirmPassword')) ? true: false} className="bg-primary disabled:bg-gray w-full mt-8 mb-6 py-3 text-white font-semibold">
           Register
         </button>
       </form>

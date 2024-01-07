@@ -26,7 +26,7 @@ type Department = {
 const columnHelper = createColumnHelper<Department>();
 
 export default function DepartmentPage() {
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState();
 
   const [department, setDepartment] = useState({});
 

@@ -23,7 +23,7 @@ const SideMenu = () => {
   return (
     <div className="flex h-screen w-[72px] transition-all group hover:w-[280px] flex-col justify-between border-e border-gray">
       <div>
-        <div className="inline-flex items-center p-5 justify-center">
+        <div className="inline-flex items-center p-5 justify-center w-full">
           <Image
             src={"/icon.svg"}
             height={32}
@@ -35,6 +35,7 @@ const SideMenu = () => {
             src={"/logo.svg"}
             height={32}
             width={180}
+            quality={500}
             className="hidden group-hover:block h-8"
             alt={`${site.name} icon`}
           />
