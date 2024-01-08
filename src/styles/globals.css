@@ -6,6 +6,9 @@
   .container {
     @apply max-w-screen-xl mx-auto px-4;
   }
+  select {
+    @apply bg-white 
+  }
 }
 
 tbody > tr > td {

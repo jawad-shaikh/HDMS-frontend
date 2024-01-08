@@ -91,6 +91,7 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
                     multiple
                     onChange={onFileChange}
                     className="sr-only"
+                    accept=".jpg, .jpeg, .pdf, .docx"
                   />
                 </label>
               </div>

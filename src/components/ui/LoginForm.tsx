@@ -26,23 +26,30 @@ const LoginForm = () => {
   });
   const onSubmit = async (credential: LoginForm) => {
     try {
-      const {
-        data: {
-          data: { token, userData },
-        },
-      } = await API.login(credential);
-
-      if (token) {
-        login(token, userData);
-        isRemember
-          ? localStorage.setItem("token", token)
-          : sessionStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(userData));
-        document.cookie = `token=${token}`
-        document.cookie = `role=${userData.role}`
-
-        router.push("/users");
-      }
+      await toast.promise(
+        API.login(credential),
+        {
+          loading: 'Logging in...',
+          success: (response: any) => {
+            const { token, userData } = response.data.data;
+            if (token) {
+              login(token, userData);
+              isRemember
+                ? localStorage.setItem("token", token)
+                : sessionStorage.setItem("token", token);
+              localStorage.setItem("user", JSON.stringify(userData));
+              document.cookie = `token=${token}`;
+              document.cookie = `role=${userData.role}`;
+              router.push("/users");
+              return 'Login successful!';
+            }
+          },
+          error: (error) => {
+            console.error(error.response.data.error);
+            return error.response.data.error;
+          },
+        }
+      );
     } catch (error: any) {
       toast.error(error.response.data.error);
       console.log(error.response.data.error);

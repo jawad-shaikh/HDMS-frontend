@@ -232,7 +232,7 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                                 type="input"
                                 className="block border-2 border-gray w-full p-2 outline-none"
                                 disabled
-                                value={document.documentRequest.documentType}
+                                value={document.documentRequest.title}
                               />
                             </div>
                             <div className="mb-4">

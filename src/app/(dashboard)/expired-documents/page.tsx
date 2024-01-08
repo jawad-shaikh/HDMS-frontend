@@ -53,11 +53,11 @@ export default function ExpiredDocumentsPage() {
     columnHelper.accessor(
       (row) =>
         row.documentRequest
-          ? `${row.documentRequest.createdBy.firstName} ${row.documentRequest.createdBy.lastName}`
+          ? `${row.documentRequest.createdBy.department}`
           : "-",
       {
-        id: "title",
-        header: "HR Employee",
+        id: "department",
+        header: "Department",
       },
     ),
 
@@ -68,6 +68,23 @@ export default function ExpiredDocumentsPage() {
     columnHelper.accessor("expireDate", {
       cell: (info) => convertDate(info.getValue()),
       header: "Expiry Date",
+    }),
+    columnHelper.display({
+      id: "status",
+      header: () => "Status",
+      cell: (props) => (
+        <p
+          className={`px-4 py-2 text-center border-2 rounded-md font-semibold ${
+            props.row.original.status === "PENDING"
+              ? "border-black/50 bg-black/10 text-black/50"
+              : props.row.original.status === "REJECTED"
+                ? "border-red text-red bg-red/20"
+                : "border-[#43936C] text-[#43936C] bg-[#43936C]/20"
+          } `}
+        >
+          {props.row.original.status}
+        </p>
+      ),
     }),
     columnHelper.display({
       id: "action",
@@ -116,7 +133,7 @@ export default function ExpiredDocumentsPage() {
   }, [isPanelOpen, update]);
   return (
     <>
-      <title>Expired Departments - HDMS</title>
+      <title>Expired Document - HDMS</title>
       <PageTitle
         title={"Expired Document"}
         icon={<Icons.error className="w-8 h-8" />}

@@ -19,28 +19,15 @@ const MultiSelect: React.FC<{ options: Option[] }> = ({ options }) => {
   return (
     <div>
       <label>Select Options:</label>
-      <select multiple={true} value={selectedOptions} onChange={() => {}}>
+      <select className='w-full block ' multiple={true} value={selectedOptions} onChange={() => {}}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
       </select>
-
-      <div>
-        <label>Selected Options:</label>
-        {selectedOptions.map((value) => (
-          <div key={value}>
-            <input
-              type="checkbox"
-              value={value}
-              checked={selectedOptions.includes(value)}
-              onChange={() => handleOptionChange(value)}
-            />
-            <span>{value}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
+
+export default MultiSelect;

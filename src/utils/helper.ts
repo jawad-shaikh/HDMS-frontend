@@ -21,3 +21,17 @@ export function formatTime(originalDate: string) {
     hour12: true,
   });
 }
+
+export function calculateDateDifferenceInDays(date1String: string, date2String: string) {
+  // Parse the dates into Date objects
+  const date1 = new Date(date1String);
+  const date2 = new Date(date2String);
+
+  // Get the difference in milliseconds
+  const differenceInMilliseconds = Math.abs(date1.getTime() - date2.getTime());
+
+  // Convert the difference to days
+  const differenceInDays = differenceInMilliseconds / (1000 * 3600 * 24);
+
+  return Math.round(differenceInDays);
+}

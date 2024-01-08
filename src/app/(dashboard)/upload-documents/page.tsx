@@ -48,12 +48,12 @@ export default function UploadDocumentPage() {
       header: "Upload Date",
     }),
     columnHelper.accessor("expireDate", {
-      cell: (info) => convertDate(info.getValue()),
+      cell: (info) => (info.getValue() ? convertDate(info.getValue()) : "-"),
       header: "Expiry Date",
     }),
     columnHelper.display({
       id: "status",
-      header: () => "status",
+      header: () => "Status",
       cell: (props) => (
         <p
           className={`px-4 py-2 text-center border-2 rounded-md font-semibold ${
@@ -107,11 +107,11 @@ export default function UploadDocumentPage() {
   };
 
   useEffect(() => {
-    if (!isPanelOpen) {
+    if (!upload) {
       fetchDocuments();
       fetchRequests();
     }
-  }, [isPanelOpen]);
+  }, [upload]);
 
   return (
     <>

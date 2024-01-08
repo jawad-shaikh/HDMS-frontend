@@ -13,7 +13,7 @@ const ConfirmModal = ({closeModal, onSubmit} : any) => {
           Cancel
         </button>
         <button onClick={onSubmit} className="bg-primary py-3 px-10 text-white font-semibold">
-          Submit
+          Confirm
         </button>
       </div>
     </div>

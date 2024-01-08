@@ -88,7 +88,7 @@ const Header: React.FC = () => {
 
                 <button
                   onClick={readNotifications}
-                  className="text-xs font-semibold text-primary flex items-center gap-1"
+                  className={`text-xs font-semibold ${!notifications[0].hasSeen ? "text-primary" : "text-[#9E9E9E]"} flex items-center gap-1`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -99,14 +99,14 @@ const Header: React.FC = () => {
                   >
                     <path
                       d="M5.77734 8.22222L6.78123 9.36952C7.06349 9.6921 7.57244 9.66833 7.8234 9.32084L10.2218 6"
-                      stroke="#004AAB"
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                     <path
                       d="M2 8C2 5.17157 2 3.75736 2.87868 2.87868C3.75736 2 5.17157 2 8 2C10.8284 2 12.2426 2 13.1213 2.87868C14 3.75736 14 5.17157 14 8C14 10.8284 14 12.2426 13.1213 13.1213C12.2426 14 10.8284 14 8 14C5.17157 14 3.75736 14 2.87868 13.1213C2 12.2426 2 10.8284 2 8Z"
-                      stroke="#004AAB"
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"

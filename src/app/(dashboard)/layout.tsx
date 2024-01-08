@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body style={inter.style} className="h-screen flex items-start">
         <SideMenu />
-        <main className="w-full max-h-screen overflow-y-auto">
+        <main className="w-full min-h-screen max-h-screen overflow-y-auto">
           <Header />
           <div className="px-8">{children}</div>
         </main>

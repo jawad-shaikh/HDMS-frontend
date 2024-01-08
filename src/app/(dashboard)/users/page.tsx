@@ -1,7 +1,9 @@
 "use client";
 import PageTitle from "@/components/global/PageTitle";
 import { Icons } from "@/components/global/icons";
+import FormSelect from "@/components/ui/FormSelect";
 import ModalWrapper from "@/components/ui/ModalWrapper";
+import MultiSelect from "@/components/ui/MultiSelector";
 import Table from "@/components/ui/Table";
 import CreateUserModal from "@/components/ui/modals/CreateUserModal";
 import DeleteUserModal from "@/components/ui/modals/DeleteUserModal";
@@ -118,6 +120,26 @@ export default function UsersPage() {
         buttonText="Add New User"
         onClick={() => setCreate(true)}
       />
+      
+      <div className="mb-4">
+        <select
+          id={'department'}
+          defaultValue={""}
+          className="block border-2 bg-white border-gray w-full p-2 outline-none"
+          name="department"
+        >
+          <option value={''}>
+            Department
+          </option>
+          {[{ id: 1, name: "HOD" }]?.map((object: any, index: number) => (
+            <option key={index} value={object.id}>
+              {object.name}
+            </option>
+          ))}
+        </select>
+
+      </div>
+
       <Table data={users} columns={columns} />
 
       <ModalWrapper title="Create New User" open={create} setOpen={setCreate}>

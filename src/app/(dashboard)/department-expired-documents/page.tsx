@@ -6,7 +6,7 @@ import PanelWrapper from "@/components/ui/PanelWrapper";
 import Table from "@/components/ui/Table";
 import UpdateUploadDocumentModal from "@/components/ui/modals/UpdateUploadDocumentModal";
 import API from "@/service/api";
-import { convertDate } from "@/utils/helper";
+import { calculateDateDifferenceInDays, convertDate } from "@/utils/helper";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -43,7 +43,8 @@ export default function ExpiredDocumentsPage() {
       header: "No ID",
     }),
     columnHelper.accessor(
-      (row) => (row.documentRequest ? `${row.documentRequest.title}` : "-"),
+      (row) => row.documentRequest
+        ? `${row.documentRequest.title}` : "-",
       {
         id: "title",
         header: "Title",
@@ -55,7 +56,7 @@ export default function ExpiredDocumentsPage() {
           ? `${row.documentRequest.createdBy.firstName} ${row.documentRequest.createdBy.lastName}`
           : "-",
       {
-        id: "title",
+        id: "hrEmployee",
         header: "HR Employee",
       },
     ),
@@ -68,6 +69,18 @@ export default function ExpiredDocumentsPage() {
       cell: (info) => convertDate(info.getValue()),
       header: "Expiry Date",
     }),
+
+    columnHelper.accessor(
+      (row) =>
+        row.documentRequest
+          ? `${calculateDateDifferenceInDays(row.updatedAt,row.expireDate)} days`
+          : "-",
+      {
+        id: "calculateDateDifferenceInDays",
+        header: "Days Since Expiry",
+      },
+    ),
+    
     columnHelper.display({
       id: "action",
       header: () => "Action",
@@ -101,7 +114,7 @@ export default function ExpiredDocumentsPage() {
   }, [isPanelOpen, update]);
   return (
     <>
-      <title>Department Expire Document - HDMS</title>
+      <title>Department Expire Documents - HDMS</title>
       <PageTitle
         title={"Department Expired Documents"}
         icon={<Icons.departmentEx className="w-8 h-8" />}

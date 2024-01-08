@@ -69,9 +69,10 @@ export default function DocumentHistoryPage() {
       cell: (info) => convertDate(info.getValue()),
       header: "Expiry Date",
     }),
+    
     columnHelper.display({
       id: "status",
-      header: () => "status",
+      header: () => "Status",
       cell: (props) => (
         <p
           className={`px-4 py-2 text-center border-2 rounded-md font-semibold ${
