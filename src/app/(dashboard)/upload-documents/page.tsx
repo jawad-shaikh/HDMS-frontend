@@ -17,8 +17,9 @@ const columnHelper = createColumnHelper<any>();
 export default function UploadDocumentPage() {
   const [documents, setDocuments] = useState();
   const [document, setDocument] = useState<any>({});
+  const [requests, setRequests] = useState<any>([]);
   const [isPanelOpen, setPanelOpen] = useState(false);
-  const [update, setUpdate] = useState(false);
+  const [upload, setUpload] = useState(false);
 
   const columns = [
     columnHelper.accessor("id", {
@@ -55,12 +56,12 @@ export default function UploadDocumentPage() {
       header: () => "status",
       cell: (props) => (
         <p
-          className={`px-4 py-2 text-center border ${
+          className={`px-4 py-2 text-center border-2 rounded-md font-semibold ${
             props.row.original.status === "PENDING"
-              ? "border-black/50 text-black/50"
+              ? "border-black/50 bg-black/10 text-black/50"
               : props.row.original.status === "REJECTED"
-                ? "border-red text-red"
-                : "border-primary text-primary"
+                ? "border-red text-red bg-red/20"
+                : "border-[#43936C] text-[#43936C] bg-[#43936C]/20"
           } `}
         >
           {props.row.original.status}
@@ -72,14 +73,6 @@ export default function UploadDocumentPage() {
       header: () => "Action",
       cell: (props) => (
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-              setDocument(props.row.original);
-              setUpdate(true);
-            }}
-          >
-            <Icons.edit className="text-blue-500 w-5 h-5" />
-          </button>
           <button
             onClick={() => {
               setDocument(props.row.original);
@@ -103,11 +96,22 @@ export default function UploadDocumentPage() {
     }
   };
 
-  useEffect(() => {
-    if (!update) {
-      fetchDocuments();
+  const fetchRequests = async () => {
+    try {
+      const { data } = await API.documentRequests();
+      console.log(data)
+      setRequests(data.data);
+    } catch (error: any) {
+      toast.error(error.message);
     }
-  }, [update]);
+  };
+
+  useEffect(() => {
+    if (!isPanelOpen) {
+      fetchDocuments();
+      fetchRequests();
+    }
+  }, [isPanelOpen]);
 
   return (
     <>
@@ -115,6 +119,10 @@ export default function UploadDocumentPage() {
       <PageTitle
         title={"Uploaded Documents"}
         icon={<Icons.upload className="w-8 h-8" />}
+        buttonText="Upload Document"
+        onClick={() => setUpload(true)}
+        buttonIcon={<Icons.upload className="w-5 h-5" />}
+
       />
       <Table data={documents} columns={columns} />
 
@@ -127,14 +135,14 @@ export default function UploadDocumentPage() {
         />
       ) : null}
 
-      <ModalWrapper
-        title="Update Documents Form"
-        open={update}
-        setOpen={setUpdate}
+<ModalWrapper
+        title="Upload Documents Form"
+        open={upload}
+        setOpen={setUpload}
       >
-        <UpdateUploadDocumentModal
-          data={document}
-          closeModal={() => setUpdate(false)}
+        <UploadDocumentModal
+          data={requests}
+          closeModal={() => setUpload(false)}
         />
       </ModalWrapper>
     </>

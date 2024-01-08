@@ -13,6 +13,10 @@ const SideMenu = () => {
   const logout = () => {
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
+
+      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      document.cookie = `role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+
     router.push("/login");
   };
 
@@ -100,21 +104,21 @@ const SideMenu = () => {
             </>
           ) : user?.role === "HOD" ? (
             <>
-              <SideLink
+              {/* <SideLink
                 icon={<Icons.required className=" w-5" />}
                 url="/required-documents"
                 name="Required Documents"
-              />
+              /> */}
               <SideLink
                 icon={<Icons.upload className=" w-5" />}
                 url="/upload-documents"
                 name="Upload Documents"
               />
-              <SideLink
+              {/* <SideLink
                 icon={<Icons.history className=" w-5" />}
                 url="/document-history"
                 name="Document History"
-              />
+              /> */}
               <SideLink
                 icon={<Icons.error className=" w-5" />}
                 url="/expired-documents"
@@ -128,21 +132,21 @@ const SideMenu = () => {
             </>
           ) : (
             <>
-              <SideLink
+              {/* <SideLink
                 icon={<Icons.required className=" w-5" />}
                 url="/required-documents"
                 name="Required Documents"
-              />
+              /> */}
               <SideLink
                 icon={<Icons.upload className=" w-5" />}
                 url="/upload-documents"
                 name="Upload Documents"
               />
-              <SideLink
+              {/* <SideLink
                 icon={<Icons.history className=" w-5" />}
                 url="/document-history"
                 name="Document History"
-              />
+              /> */}
               <SideLink
                 icon={<Icons.error className=" w-5" />}
                 url="/expired-documents"

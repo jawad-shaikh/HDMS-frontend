@@ -76,7 +76,7 @@ export default function DocumentHistoryPage() {
         <p
           className={`px-4 py-2 text-center border-2 rounded-md font-semibold ${
             props.row.original.status === "PENDING"
-              ? "border-black/50 text-black/50"
+              ? "border-black/50 bg-black/10 text-black/50"
               : props.row.original.status === "REJECTED"
                 ? "border-red text-red bg-red/20"
                 : "border-[#43936C] text-[#43936C] bg-[#43936C]/20"

@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import API from "@/service/api";
 import toast from "react-hot-toast";
 import { Icons } from "@/components/global/icons";
+import FormSelect from "../FormSelect";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
   const [selectedFiles, setSelectedFiles] = useState<any>([] as any);
@@ -11,16 +14,20 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<any>();
+  } = useForm<any>({
+    resolver: yupResolver(yup.object().shape({
+      purpose: yup.string().required("Purpose is required"),
+    }))
+  });
 
   const onSubmit = async (fData: any) => {
-    console.log(fData);
     if (selectedFiles.length === 0) {
       toast.error("Please Select Files");
       return null;
     }
-
+    console.log(fData)
     try {
       const formData = new FormData();
 
@@ -29,10 +36,10 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
         console.log(selectedFiles[i]);
         formData.append("documents", selectedFiles[i]); // Use a consistent name for all files
       }
-      formData.append("documentRequestId", data.id);
       if (data.isRepeated) {
         formData.append("expireDate", new Date(fData.expireDate).toISOString());
       }
+      formData.append("documentRequestId", fData.purpose);
 
       await toast.promise(API.uploadDocument(formData), {
         loading: "Uploading document...",
@@ -46,29 +53,17 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
     }
   };
 
+  const isRepeat = () => {
+    const obj = data.filter((i: any) => i.id == watch('purpose'))[0];
+    return obj?.isRepeated;
+  }
   const onFileChange = (event: any) => {
     setSelectedFiles([...event.target.files]);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4">
-        <label className="block mb-2 text-sm">Purpose</label>
-        <input
-          value={data.title}
-          disabled
-          className="block border-2 border-gray w-full p-2 outline-none"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 text-sm">Description</label>
-        <textarea
-          value={data.description}
-          disabled
-          className="block border-2 border-gray w-full p-2 outline-none"
-        />
-      </div>
-
+      <FormSelect options={data.map((i:any) => ({id: i.id, name: i.title}))} errors={errors} register={register} label={"Purpose"} name={'purpose'} />
       <div className="mb-4">
         <label htmlFor="cover-photo" className="block mb-2 text-sm">
           Upload
@@ -109,7 +104,7 @@ const UploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
           )}
         </div>
       </div>
-      {data.isRepeated && (
+      {isRepeat() && (
         <div className="mb-4">
           <label className="block mb-2 text-sm" htmlFor={"expiredDate"}>
             Expired Date

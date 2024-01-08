@@ -38,7 +38,8 @@ const LoginForm = () => {
           ? localStorage.setItem("token", token)
           : sessionStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(userData));
-        router.push("/required-documents");
+
+        router.push("/users");
       }
     } catch (error: any) {
       toast.error(error.response.data.error);

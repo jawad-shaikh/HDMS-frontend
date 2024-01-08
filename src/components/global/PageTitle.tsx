@@ -6,12 +6,14 @@ type PageTitleProps = {
   buttonText?: string;
   icon: React.ReactNode;
   onClick?: () => void;
+  buttonIcon?: React.ReactNode;
 };
 const PageTitle: React.FC<PageTitleProps> = ({
   title,
   icon,
   onClick,
   buttonText,
+  buttonIcon,
 }) => {
   return (
     <div className="flex justify-between my-6">
@@ -25,7 +27,7 @@ const PageTitle: React.FC<PageTitleProps> = ({
           onClick={onClick}
           className="bg-primary p-3 text-sm font-semibold text-white flex items-center gap-3"
         >
-          <Icons.add />
+          {buttonIcon ? buttonIcon :<Icons.add />}
           {buttonText}
         </button>
       )}

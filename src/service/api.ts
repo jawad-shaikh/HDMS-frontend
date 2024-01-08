@@ -32,6 +32,7 @@ interface APIInstance extends AxiosInstance {
 
   submissionDocuments: () => Promise<any>;
   uploadDocument: (data: any) => Promise<any>;
+  documentRequests: () => Promise<any>;
   updateUploadDocument: (id: string, data: any) => Promise<any>;
   downloadDocuments: (id: string, query: any) => Promise<any>;
 
@@ -124,6 +125,10 @@ API.departmentExpiredHistory = () => {
 
 API.submissionDocuments = () => {
   return API.get("/documents/submissions");
+};
+
+API.documentRequests = () => {
+  return API.get("/documents/requests");
 };
 
 API.uploadDocument = (data: any) => {
