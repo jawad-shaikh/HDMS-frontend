@@ -38,6 +38,8 @@ const LoginForm = () => {
           ? localStorage.setItem("token", token)
           : sessionStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(userData));
+        document.cookie = `token=${token}`
+        document.cookie = `role=${userData.role}`
 
         router.push("/users");
       }
