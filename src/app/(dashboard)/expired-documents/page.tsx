@@ -52,8 +52,8 @@ export default function ExpiredDocumentsPage() {
     ),
     columnHelper.accessor(
       (row) =>
-        row.documentRequest
-          ? `${row.documentRequest.createdBy.department}`
+        row.user
+          ? `${row.user.department.name}`
           : "-",
       {
         id: "department",

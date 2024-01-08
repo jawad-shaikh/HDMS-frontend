@@ -92,6 +92,7 @@ const UpdateUploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
                     multiple
                     onChange={onFileChange}
                     className="sr-only"
+                    accept=".jpg, .jpeg, .pdf, .docx"
                   />
                 </label>
               </div>
@@ -99,7 +100,7 @@ const UpdateUploadDocumentModal: React.FC<any> = ({ data, closeModal }) => {
                 Click or drag file to this area to upload
               </p>
               <p className="text-xs leading-5 text-gray-400">
-                File format jpg, png, pdf, docx and xlsx
+                File format jpg, pdf, docx
               </p>
             </>
           )}
