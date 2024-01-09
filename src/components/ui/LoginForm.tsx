@@ -65,6 +65,7 @@ const LoginForm = () => {
               }
               return 'Login successful!';
             }
+            throw new Error("")
           },
           error: (error) => {
             console.error(error.response.data.error);
