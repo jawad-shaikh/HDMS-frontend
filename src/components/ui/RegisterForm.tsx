@@ -45,7 +45,7 @@ const RegisterForm = () => {
 
   const getDepartments = async () => {
     try {
-      const { data } = await API.departments();
+      const { data } = await API.departments('');
       setDepartments(data.data);
     } catch (error) {
       console.log(error);
