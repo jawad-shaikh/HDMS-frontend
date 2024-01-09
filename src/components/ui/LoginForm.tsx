@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "./FormInput";
@@ -24,6 +24,23 @@ const LoginForm = () => {
   } = useForm<LoginForm>({
     resolver: yupResolver(loginSchema),
   });
+
+  // useEffect(() => {
+  //   const userData = JSON.parse(localStorage.getItem('user') || "")
+    
+  //   if(userData){
+  //     if(userData.role === "ADMIN"){
+  //       router.push("/users");
+  //     }else if(userData.role === "HR"){
+  //       router.push("/required-documents");
+  //     }
+  //     else {
+  //       router.push("/upload-documents");
+  //     }
+  //   }
+    
+  // }, [])
+  
   const onSubmit = async (credential: LoginForm) => {
     try {
       await toast.promise(
@@ -38,9 +55,14 @@ const LoginForm = () => {
                 ? localStorage.setItem("token", token)
                 : sessionStorage.setItem("token", token);
               localStorage.setItem("user", JSON.stringify(userData));
-              document.cookie = `token=${token}`;
-              document.cookie = `role=${userData.role}`;
-              router.push("/users");
+              if(userData.role === "ADMIN"){
+                router.push("/users");
+              }else if(userData.role === "HR"){
+                router.push("/required-documents");
+              }
+              else {
+                router.push("/upload-documents");
+              }
               return 'Login successful!';
             }
           },

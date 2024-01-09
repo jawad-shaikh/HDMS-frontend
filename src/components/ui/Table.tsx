@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -9,10 +9,26 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { Icons } from "../global/icons";
+import { usePathname } from "next/navigation";
 
-const Table = ({ data, columns }: any) => {
+const Table = ({ data, columns, departments, hods, hrs, setQuery, lastUpdate,uploadDate, requestDate,expireDate, status }: any) => {
+
+  const pathname = usePathname()
   const [sorting, setSorting] = useState<SortingState>([]);
   const [search, setSearch] = useState<any>("");
+
+  const [departmentQuery, setDepartmentQuery] = useState('')
+  const [hodQuery, setHodQuery] = useState('')
+  const [hrQuery, setHrQuery] = useState('hrId=0')
+
+  const [statusQuery, setStatusQuery] = useState('status=0')
+
+
+  const [updateDateQuery, setUpdateDateQuery] = useState('start=0&end=0')
+  const [uploadDateQuery, setUploadDateQuery] = useState('start=0&end=0')
+  const [expireDateQuery, setExpireDateQuery] = useState('startExpiry=0&endExpiry=0')
+  const [requestedDateQuery, setRequestedDateQuery] = useState('start=0&end=0')
+
 
   const table = useReactTable({
     data,
@@ -28,32 +44,192 @@ const Table = ({ data, columns }: any) => {
     getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setSearch,
   });
+
+  useEffect(() => {
+    console.log(updateDateQuery)
+    if (pathname === "/users") {
+      setQuery(`?${departmentQuery}&${updateDateQuery}`)
+    }
+    if (pathname === "/department") {
+      setQuery(`?${hodQuery}&${updateDateQuery}`)
+    }
+
+    if (pathname === "/required-documents") {
+      setQuery(`?${requestedDateQuery}`)
+    }
+
+    if (pathname === "/received-documents") {
+      setQuery(`?${hrQuery}&${expireDateQuery}&${uploadDateQuery}`)
+    }
+
+    if (pathname === "/document-history") {
+      setQuery(`?${hrQuery}&${expireDateQuery}&${uploadDateQuery}&${statusQuery}`)
+    }
+  }, [hodQuery, departmentQuery, updateDateQuery, requestedDateQuery,uploadDateQuery, expireDateQuery, hrQuery, statusQuery])
+
   return (
     <>
-      <div className="inline-flex w-[300px] items-center border-2 border-gray p-2 gap-2 mb-4">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.3-4.3" />
-        </svg>
-        <input
-          type="text"
-          placeholder="Search"
-          className="block w-full outline-none"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="inline-flex w-[300px] items-center border-2 border-gray p-2 gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search"
+            className="block w-full outline-none"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
 
+        <div className="flex items-center gap-4">
+
+          {departments && <select
+            value={departmentQuery}
+            onChange={(e) => setDepartmentQuery(e.target.value)}
+            defaultValue={"departmentId=0"}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+            name="department"
+          >
+            <option value={'departmentId=0'}>
+              All Department
+            </option>
+            {departments.map((department: any) => ({ id: department.id, name: department.name }))?.map((object: any, index: number) => (
+              <option key={index} value={`departmentId=${object.id}`}>
+                {object.name}
+              </option>
+            ))}
+          </select>}
+
+          {hods?.length ? <select
+            value={hodQuery}
+            onChange={(e) => setHodQuery(e.target.value)}
+            defaultValue={"hodId=0"}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+            name="department"
+          >
+            <option value={'hodId=0'}>
+              All HOD
+            </option>
+            {hods?.map((hod: any) => ({ id: hod.id, name: hod.firstName + " " + hod.lastName }))?.map((object: any, index: number) => (
+              <option key={index} value={`hodId=${object.id}`}>
+                {object.name}
+              </option>
+            ))}
+          </select> : null}
+
+          {hrs?.length ? <select
+            value={hrQuery}
+            onChange={(e) => setHrQuery(e.target.value)}
+            defaultValue={"hrId=0"}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+            name="department"
+          >
+            <option value={'hrId=0'}>
+              All HOD
+            </option>
+            {hrs?.map((hod: any) => ({ id: hod.id, name: hod.firstName + " " + hod.lastName }))?.map((object: any, index: number) => (
+              <option key={index} value={`hrId=${object.id}`}>
+                {object.name}
+              </option>
+            ))}
+          </select> : null}
+
+          {lastUpdate && <select
+            defaultValue={'start=0&end=0'}
+            value={updateDateQuery}
+            onChange={(e) => setUpdateDateQuery(e.target.value)}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+          >
+            <option value={'start=0&end=0'}>
+              All Updated
+            </option>
+            {[{ id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Today" }, { id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 7)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 7 Days" }, { id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 30)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 30 Days" }]?.map((object: any, index: number) => (
+              <option key={index} value={object.id}>
+                {object.name}
+              </option>
+            ))}
+          </select>}
+
+          {uploadDate && <select
+            defaultValue={'start=0&end=0'}
+            value={uploadDateQuery}
+            onChange={(e) => setUploadDateQuery(e.target.value)}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+          >
+            <option value={'start=0&end=0'}>
+              All Uploads
+            </option>
+            {[{ id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Today" }, { id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 7)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 7 Days" }, { id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 30)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 30 Days" }]?.map((object: any, index: number) => (
+              <option key={index} value={object.id}>
+                {object.name}
+              </option>
+            ))}
+          </select>}
+
+          {expireDate && <select
+            defaultValue={'startExpiry=0&endExpiry=0'}
+            value={expireDateQuery}
+            onChange={(e) => setExpireDateQuery(e.target.value)}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+          >
+            <option value={'startExpiry=0&endExpiry=0'}>
+              All Expired
+            </option>
+            {[{ id: `startExpiry=${new Date(new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()).toISOString()}&endExpiry=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Today" }, { id: `startExpiry=${new Date(new Date(new Date().setDate(new Date().getDate() - 7)).toDateString()).toISOString()}&endExpiry=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 7 Days" }, { id: `startExpiry=${new Date(new Date(new Date().setDate(new Date().getDate() - 30)).toDateString()).toISOString()}&endExpiry=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 30 Days" }]?.map((object: any, index: number) => (
+              <option key={index} value={object.id}>
+                {object.name}
+              </option>
+            ))}
+          </select>}
+
+          {requestDate && <select
+            defaultValue={'start=0&end=0'}
+            value={requestedDateQuery}
+            onChange={(e) => setRequestedDateQuery(e.target.value)}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+          >
+            <option value={'start=0&end=0'}>
+              Requested Date
+            </option>
+            {[{ id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Today" }, { id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 7)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 7 Days" }, { id: `start=${new Date(new Date(new Date().setDate(new Date().getDate() - 30)).toDateString()).toISOString()}&end=${new Date(new Date(new Date().setDate(new Date().getDate() + 1)).toDateString()).toISOString()}`, name: "Last 30 Days" }]?.map((object: any, index: number) => (
+              <option key={index} value={object.id}>
+                {object.name}
+              </option>
+            ))}
+          </select>}
+
+          {status && <select
+            defaultValue={'status=0'}
+            value={statusQuery}
+            onChange={(e) => setStatusQuery(e.target.value)}
+            className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
+          >
+            <option value={'status=0'}>
+              Requested Date
+            </option>
+            {[{id: "status=APPROVED", name : "APPROVED"}, {id: "status=PENDING", name : "PENDING"}, {id: "status=REJECTED", name : "REJECTED"}]?.map((object: any, index: number) => (
+              <option key={index} value={object.id}>
+                {object.name}
+              </option>
+            ))}
+          </select>}
+
+        </div>
+
+      </div>
       {
         data ? <><table className="w-full overflow-auto border border-gray">
           <thead>
@@ -160,7 +336,7 @@ const Table = ({ data, columns }: any) => {
               <span className="block">Next</span>
 
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16" className="ml-2" fill="none">
-                <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>

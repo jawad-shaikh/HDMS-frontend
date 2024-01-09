@@ -13,10 +13,6 @@ const SideMenu = () => {
   const logout = () => {
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
-
-      document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      document.cookie = `role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-
     router.push("/login");
   };
 

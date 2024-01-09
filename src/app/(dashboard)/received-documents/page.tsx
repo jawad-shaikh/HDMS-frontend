@@ -12,9 +12,15 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function ReceivedDocumentsPage() {
-  const [documents, setDocuments] = useState();
+  const [documents, setDocuments] = useState<any  >();
   const [document, setDocument] = useState<any>({});
   const [isPanelOpen, setPanelOpen] = useState(false);
+
+
+  const [hrs, setHrs] = useState([]);
+
+  const [query, setQuery] = useState('');
+
 
   const columns = [
     columnHelper.accessor("id", {
@@ -77,18 +83,32 @@ export default function ReceivedDocumentsPage() {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await API.submissionDocuments();
+      const { data } = await API.submissionDocuments(query);
       setDocuments(data.data);
     } catch (error: any) {
       toast.error(error.message);
     }
   };
 
+  const fetchHrs = async () => {
+    try {
+      const { data } = await API.hrs();
+      setHrs(data.data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchHrs();
+  }, []);
+
   useEffect(() => {
     if (!isPanelOpen) {
+      setDocuments('')
       fetchDocuments();
     }
-  }, [isPanelOpen]);
+  }, [isPanelOpen, query]);
 
   return (
     <>
@@ -97,7 +117,7 @@ export default function ReceivedDocumentsPage() {
         title={"Received Documents"}
         icon={<Icons.received className="w-8 h-8" />}
       />
-      <Table data={documents} columns={columns} />
+      <Table data={documents} columns={columns} setQuery={setQuery} hrs={hrs} uploadDate={true} expireDate={true} />
 
       {document ? (
         <PanelWrapper

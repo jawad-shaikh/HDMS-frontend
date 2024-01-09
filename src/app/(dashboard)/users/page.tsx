@@ -35,13 +35,20 @@ type Person = {
 const columnHelper = createColumnHelper<Person>();
 
 export default function UsersPage() {
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState<any>();
 
   const [user, setUser] = useState({});
 
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
   const [deleteM, setDelete] = useState(false);
+
+  const [departments, setDepartments] = useState([]);
+
+  const [query, setQuery] = useState('');
+
+
+  
 
   const columns = [
     columnHelper.accessor("id", {
@@ -100,16 +107,30 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const { data } = await API.users();
+      const { data } = await API.users(query);
       setUsers(data.data);
     } catch (error: any) {
       toast.error(error.message);
     }
   };
 
+  const fetchDepartments = async () => {
+    try {
+      const { data } = await API.departments('');
+      setDepartments(data.data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
+    setUsers('')
     fetchUsers();
-  }, [create, update, deleteM]);
+  }, [create, update, deleteM, query]);
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
 
   return (
     <>
@@ -121,26 +142,7 @@ export default function UsersPage() {
         onClick={() => setCreate(true)}
       />
       
-      <div className="mb-4">
-        <select
-          id={'department'}
-          defaultValue={""}
-          className="block border-2 bg-white border-gray w-full p-2 outline-none"
-          name="department"
-        >
-          <option value={''}>
-            Department
-          </option>
-          {[{ id: 1, name: "HOD" }]?.map((object: any, index: number) => (
-            <option key={index} value={object.id}>
-              {object.name}
-            </option>
-          ))}
-        </select>
-
-      </div>
-
-      <Table data={users} columns={columns} />
+      <Table data={users} columns={columns} departments={departments} setQuery={setQuery} lastUpdate={true}  />
 
       <ModalWrapper title="Create New User" open={create} setOpen={setCreate}>
         <CreateUserModal closeModal={() => setCreate(false)} />

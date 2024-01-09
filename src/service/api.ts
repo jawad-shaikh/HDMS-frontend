@@ -10,18 +10,19 @@ interface APIInstance extends AxiosInstance {
   login: (credentials: Credentials) => Promise<any>;
   register: (credentials: any) => Promise<any>;
 
-  users: () => Promise<any>;
+  users: (query: string) => Promise<any>;
   hods: () => Promise<any>;
+  hrs: () => Promise<any>;
   createUser: (data: TUser) => Promise<any>;
   updateUser: (id: string, user: any) => Promise<any>;
   deleteUser: (id: string) => Promise<any>;
 
-  departments: () => Promise<any>;
+  departments: (query: string) => Promise<any>;
   createDepartment: (department: TDepartment) => Promise<any>;
   updateDepartment: (id: string, department: TDepartment) => Promise<any>;
   deleteDepartment: (id: string) => Promise<any>;
 
-  requiredDocuments: () => Promise<any>;
+  requiredDocuments: (query: string) => Promise<any>;
   createRequiredDocument: (data: any) => Promise<any>;
   updateRequiredDocument: (id: string, data: any) => Promise<any>;
   deleteRequiredDocument: (id: string) => Promise<any>;
@@ -30,7 +31,7 @@ interface APIInstance extends AxiosInstance {
   expiredHistory: () => Promise<any>;
   departmentExpiredHistory: () => Promise<any>;
 
-  submissionDocuments: () => Promise<any>;
+  submissionDocuments: (query: string) => Promise<any>;
   uploadDocument: (data: any) => Promise<any>;
   documentRequests: () => Promise<any>;
   updateUploadDocument: (id: string, data: any) => Promise<any>;
@@ -58,8 +59,12 @@ API.register = (credentials) => {
 };
 
 // users
-API.users = () => {
-  return API.get("/users");
+API.users = (query: string) => {
+  return API.get(`/users${query}`);
+};
+
+API.hrs = () => {
+  return API.get("/users?role=HR");
 };
 
 API.hods = () => {
@@ -78,8 +83,8 @@ API.deleteUser = (id: string) => {
   return API.delete(`/users/${id}`);
 };
 // departments
-API.departments = () => {
-  return API.get("/departments");
+API.departments = (query: string) => {
+  return API.get(`/departments${query}`);
 };
 
 API.createDepartment = (department: TDepartment) => {
@@ -95,8 +100,8 @@ API.deleteDepartment = (id: string) => {
 };
 
 // required documents
-API.requiredDocuments = () => {
-  return API.get("/documents/requests");
+API.requiredDocuments = (query: string) => {
+  return API.get(`/documents/requests${query}`);
 };
 
 API.createRequiredDocument = (data: any) => {
@@ -123,8 +128,8 @@ API.departmentExpiredHistory = () => {
   return API.get(`/documents/expired?department=true`);
 };
 
-API.submissionDocuments = () => {
-  return API.get("/documents/submissions");
+API.submissionDocuments = (query:string) => {
+  return API.get(`/documents/submissions${query}`);
 };
 
 API.documentRequests = () => {

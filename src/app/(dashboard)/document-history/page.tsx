@@ -141,7 +141,7 @@ export default function DocumentHistoryPage() {
         title={"Document History"}
         icon={<Icons.history className="w-8 h-8" />}
       />
-      <Table data={documents} columns={columns} />
+      <Table data={documents} columns={columns} status={true} />
       {document ? (
         <PanelWrapper
           open={isPanelOpen}

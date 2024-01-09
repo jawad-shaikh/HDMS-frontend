@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function RequiredDocumentsPage() {
-  const [documents, setDocuments] = useState();
+  const [documents, setDocuments] = useState<any>();
 
   const [document, setDocument] = useState({});
 
@@ -26,6 +26,9 @@ export default function RequiredDocumentsPage() {
   const [deleteM, setDelete] = useState(false);
 
   const [user, setUser] = useState<any>({});
+
+  const [query, setQuery] = useState('');
+
 
   const columns = [
     columnHelper.accessor("id", {
@@ -82,7 +85,7 @@ export default function RequiredDocumentsPage() {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await API.requiredDocuments();
+      const { data } = await API.requiredDocuments(query);
       setDocuments(data.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -95,9 +98,10 @@ export default function RequiredDocumentsPage() {
 
   useEffect(() => {
     if (!create && !update && !deleteM && !upload) {
+      setDocuments('')
       fetchDocuments();
     }
-  }, [create, update, deleteM, upload]);
+  }, [create, update, deleteM, upload, query]);
 
   return (
     <>
@@ -115,7 +119,7 @@ export default function RequiredDocumentsPage() {
           icon={<Icons.required className="w-8 h-8" />}
         />
       )}
-      <Table data={documents} columns={columns} />
+      <Table data={documents} columns={columns} setQuery={setQuery} requestDate={true}  />
 
       <ModalWrapper
         title="Create New Document"

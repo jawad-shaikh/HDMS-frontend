@@ -20,22 +20,20 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
   const downloadDoc = async (id: string) => {
     try {
       const {data} = await API.downloadDocuments(id, `?remove=${isConfirm}`);
-
-
-      const blob = new Blob([data], {type: 'application/zip'});
-      // Create a download link and trigger the download
-      const downloadLink = window.document.createElement('a');
-      downloadLink.href = window.URL.createObjectURL(blob);
-      downloadLink.download = 'downloaded_files.zip';
-      window.document.body.appendChild(downloadLink);
-      downloadLink.click();
-      window.document.body.removeChild(downloadLink);
-      
-
+      // Create a link element and set properties for download
+      const linkElement = window.document.createElement('a');
+      linkElement.href = data;
+      linkElement.download = 'downloaded_files.zip'; // Choose a desired filename
+      linkElement.style.display = 'none';
+      linkElement.target = "_blank";
+      // Append, click, and remove the link element to trigger download
+      window.document.body.appendChild(linkElement);
+      linkElement.click();
+      window.document.body.removeChild(linkElement);
 
     } catch (error) {
       console.error("Error downloading documents:", error);
-    }finally {
+    } finally {
       setOpen(false)
     }
   };
@@ -173,14 +171,14 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                             {document?.documents?.length &&
                               !document?.documents[0].hasDownloaded &&
                               (user.role === "ADMIN" || user.role === "HR") ? (
-                                <button
-                                  onClick={() => downloadDoc(document.id)}
-                                  className="border border-primary text-primary font-medium text-xs px-4 py-2"
-                                >
-                                  {" "}
-                                  Download All File(s)
-                                </button>
-                              ) : null}
+                              <button
+                                onClick={() => downloadDoc(document.id)}
+                                className="border border-primary text-primary font-medium text-xs px-4 py-2"
+                              >
+                                {" "}
+                                Download All File(s)
+                              </button>
+                            ) : null}
                           </div>
 
                           <ul role="list" className="divide-y divide-white">
@@ -212,7 +210,7 @@ const PanelWrapper = ({ open, setOpen, title, document, isUpdate }: any) => {
                         </dd>
 
                         {
-                          (document?.documents?.length && (user.role === "ADMIN" || user.role === "HR")) ?<label className="text-primary text-xs inline-flex mb-6">
+                          (document?.documents?.length && (user.role === "ADMIN" || user.role === "HR")) ? <label className="text-primary text-xs inline-flex mb-6">
                             <input type="checkbox" className="!mr-2" checked={isConfirm} onChange={confirmHandler} />
                             Document Received and Downloaded
                           </label> : null

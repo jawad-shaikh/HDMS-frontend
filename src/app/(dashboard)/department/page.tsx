@@ -26,13 +26,17 @@ type Department = {
 const columnHelper = createColumnHelper<Department>();
 
 export default function DepartmentPage() {
-  const [departments, setDepartments] = useState();
+  const [departments, setDepartments] = useState<any>();
 
   const [department, setDepartment] = useState({});
 
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
   const [deleteM, setDelete] = useState(false);
+
+  const [hods, setHods] = useState([]);
+
+  const [query, setQuery] = useState('');
 
   const columns = [
     columnHelper.accessor("id", {
@@ -90,18 +94,32 @@ export default function DepartmentPage() {
 
   const fetchDepartments = async () => {
     try {
-      const { data } = await API.departments();
+      const { data } = await API.departments(query);
       setDepartments(data.data);
     } catch (error: any) {
       toast.error(error.message);
     }
   };
 
+  const fetchHods = async () => {
+    try {
+      const { data } = await API.hods();
+      setHods(data.data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchHods();
+  }, []);
+
   useEffect(() => {
     if (!create && !update && !deleteM) {
+      setDepartments('')
       fetchDepartments();
     }
-  }, [create, update, deleteM]);
+  }, [create, update, deleteM, query]);
 
   return (
     <>
@@ -112,7 +130,7 @@ export default function DepartmentPage() {
         buttonText="Add New Department"
         onClick={() => setCreate(true)}
       />
-      <Table data={departments} columns={columns} />
+      <Table data={departments} columns={columns} hods={hods} setQuery={setQuery} lastUpdate={true} />
 
       <ModalWrapper
         title="Create New Department"
