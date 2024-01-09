@@ -73,7 +73,7 @@ const EditUserModal: React.FC<any> = ({ defaultValue, closeModal }) => {
 
   const getDepartments = async () => {
     try {
-      const { data } = await API.departments();
+      const { data } = await API.departments("");
 
       console.log(data.data);
       setDepartments(data.data);

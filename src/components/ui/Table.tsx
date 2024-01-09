@@ -62,8 +62,16 @@ const Table = ({ data, columns, departments, hods, hrs, setQuery, lastUpdate,upl
       setQuery(`?${hrQuery}&${expireDateQuery}&${uploadDateQuery}`)
     }
 
-    if (pathname === "/document-history") {
+    if (pathname === "/document-history" || pathname === "/upload-documents") {
       setQuery(`?${hrQuery}&${expireDateQuery}&${uploadDateQuery}&${statusQuery}`)
+    }
+
+    if (pathname === "/expired-documents") {
+      setQuery(`?${expireDateQuery}&${uploadDateQuery}&${statusQuery}`)
+
+    }
+    if(pathname === "/department-expired-documents") {
+      setQuery(`${expireDateQuery}&${uploadDateQuery}`)
     }
   }, [hodQuery, departmentQuery, updateDateQuery, requestedDateQuery,uploadDateQuery, expireDateQuery, hrQuery, statusQuery])
 
@@ -218,7 +226,7 @@ const Table = ({ data, columns, departments, hods, hrs, setQuery, lastUpdate,upl
             className="block border-2 bg-white border-gray w-[12rem] p-2 outline-none"
           >
             <option value={'status=0'}>
-              Requested Date
+             All Status
             </option>
             {[{id: "status=APPROVED", name : "APPROVED"}, {id: "status=PENDING", name : "PENDING"}, {id: "status=REJECTED", name : "REJECTED"}]?.map((object: any, index: number) => (
               <option key={index} value={object.id}>

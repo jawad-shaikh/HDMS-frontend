@@ -14,11 +14,13 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function ExpiredDocumentsPage() {
-  const [documents, setDocuments] = useState();
+  const [documents, setDocuments] = useState<any>();
   const [document, setDocument] = useState<any>({});
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [update, setUpdate] = useState(false);
   const [user, setUser] = useState<any>({});
+
+  const [query, setQuery] = useState('');
 
   const columns = [
     columnHelper.accessor("id", {
@@ -117,7 +119,7 @@ export default function ExpiredDocumentsPage() {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await API.expiredHistory();
+      const { data } = await API.expiredHistory(query);
       setDocuments(data.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -129,8 +131,10 @@ export default function ExpiredDocumentsPage() {
   }, []);
 
   useEffect(() => {
+    setDocuments('')
     fetchDocuments();
-  }, [isPanelOpen, update]);
+  }, [isPanelOpen, update, query]);
+
   return (
     <>
       <title>Expired Document - HDMS</title>
@@ -138,7 +142,7 @@ export default function ExpiredDocumentsPage() {
         title={"Expired Document"}
         icon={<Icons.error className="w-8 h-8" />}
       />
-      <Table data={documents} columns={columns} />
+      <Table data={documents} columns={columns} setQuery={setQuery} uploadDate={true} expireDate={true} status={true} />
 
       {document ? (
         <PanelWrapper

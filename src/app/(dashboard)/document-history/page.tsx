@@ -14,11 +14,13 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function DocumentHistoryPage() {
-  const [documents, setDocuments] = useState();
+  const [documents, setDocuments] = useState<any>();
   const [document, setDocument] = useState<any>({});
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [update, setUpdate] = useState(false);
   const [user, setUser] = useState<any>({});
+  const [hrs, setHrs] = useState([]);
+  const [query, setQuery] = useState('');
 
   const columns = [
     columnHelper.accessor("id", {
@@ -119,8 +121,17 @@ export default function DocumentHistoryPage() {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await API.documentHistory();
+      const { data } = await API.documentHistory(query);
       setDocuments(data.data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchHrs = async () => {
+    try {
+      const { data } = await API.hrs();
+      setHrs(data.data);
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -128,11 +139,13 @@ export default function DocumentHistoryPage() {
 
   useEffect(() => {
     setUser(JSON.parse(window.localStorage.getItem("user") || ""));
+    fetchHrs()
   }, []);
 
   useEffect(() => {
+    setDocuments('')
     fetchDocuments();
-  }, [update, isPanelOpen]);
+  }, [update, isPanelOpen, query]);
 
   return (
     <>
@@ -141,7 +154,7 @@ export default function DocumentHistoryPage() {
         title={"Document History"}
         icon={<Icons.history className="w-8 h-8" />}
       />
-      <Table data={documents} columns={columns} status={true} />
+      <Table data={documents} columns={columns} expireDate={true} uploadDate={true} status={true} hrs={hrs} setQuery={setQuery} />
       {document ? (
         <PanelWrapper
           open={isPanelOpen}

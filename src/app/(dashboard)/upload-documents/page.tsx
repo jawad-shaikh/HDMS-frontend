@@ -15,11 +15,15 @@ import toast from "react-hot-toast";
 const columnHelper = createColumnHelper<any>();
 
 export default function UploadDocumentPage() {
-  const [documents, setDocuments] = useState();
+  const [documents, setDocuments] = useState<any>();
   const [document, setDocument] = useState<any>({});
   const [requests, setRequests] = useState<any>([]);
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [upload, setUpload] = useState(false);
+
+  const [hrs, setHrs] = useState([]);
+
+  const [query, setQuery] = useState('');
 
   const columns = [
     columnHelper.accessor("id", {
@@ -89,7 +93,7 @@ export default function UploadDocumentPage() {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await API.submissionDocuments();
+      const { data } = await API.submissionDocuments(query);
       setDocuments(data.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -106,12 +110,26 @@ export default function UploadDocumentPage() {
     }
   };
 
+  const fetchHrs = async () => {
+    try {
+      const { data } = await API.hrs();
+      setHrs(data.data);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchHrs();
+  }, []);
+
   useEffect(() => {
     if (!upload) {
+      setDocuments('')
       fetchDocuments();
       fetchRequests();
     }
-  }, [upload]);
+  }, [upload,query]);
 
   return (
     <>
@@ -124,7 +142,7 @@ export default function UploadDocumentPage() {
         buttonIcon={<Icons.upload className="w-5 h-5" />}
 
       />
-      <Table data={documents} columns={columns} />
+      <Table data={documents} columns={columns} setQuery={setQuery} status={true} expireDate={true} uploadDate={true} hrs={hrs}  />
 
       {document ? (
         <PanelWrapper

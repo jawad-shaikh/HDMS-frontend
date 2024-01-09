@@ -19,6 +19,9 @@ export default function ExpiredDocumentsPage() {
   const [isPanelOpen, setPanelOpen] = useState(false);
   const [update, setUpdate] = useState(false);
 
+  const [query, setQuery] = useState('');
+
+
   const columns = [
     columnHelper.accessor("id", {
       cell: (info) => info.getValue().toString(),
@@ -102,7 +105,7 @@ export default function ExpiredDocumentsPage() {
 
   const fetchDocuments = async () => {
     try {
-      const { data } = await API.departmentExpiredHistory();
+      const { data } = await API.departmentExpiredHistory(query);
       setDocuments(data.data);
     } catch (error: any) {
       toast.error(error.message);
@@ -111,7 +114,7 @@ export default function ExpiredDocumentsPage() {
 
   useEffect(() => {
     fetchDocuments();
-  }, [isPanelOpen, update]);
+  }, [isPanelOpen, update, query]);
   return (
     <>
       <title>Department Expire Documents - HDMS</title>
@@ -119,7 +122,7 @@ export default function ExpiredDocumentsPage() {
         title={"Department Expired Documents"}
         icon={<Icons.departmentEx className="w-8 h-8" />}
       />
-      <Table data={documents} columns={columns} />
+      <Table data={documents} columns={columns} setQuery={setQuery} uploadDate={true} expireDate={true} />
 
       {document ? (
         <PanelWrapper

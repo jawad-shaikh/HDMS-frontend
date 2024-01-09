@@ -27,9 +27,9 @@ interface APIInstance extends AxiosInstance {
   updateRequiredDocument: (id: string, data: any) => Promise<any>;
   deleteRequiredDocument: (id: string) => Promise<any>;
 
-  documentHistory: () => Promise<any>;
-  expiredHistory: () => Promise<any>;
-  departmentExpiredHistory: () => Promise<any>;
+  documentHistory: (query: string) => Promise<any>;
+  expiredHistory: (query: string) => Promise<any>;
+  departmentExpiredHistory: (query: string) => Promise<any>;
 
   submissionDocuments: (query: string) => Promise<any>;
   uploadDocument: (data: any) => Promise<any>;
@@ -45,7 +45,7 @@ interface APIInstance extends AxiosInstance {
 }
 
 const API = axios.create({
-  baseURL: "https://s2wz3vsq-4400.inc1.devtunnels.ms/api/v1",
+  baseURL: "https://pkm531pv-4400.inc1.devtunnels.ms/api/v1",
   timeout: 30000,
   timeoutErrorMessage: "Timeout error",
 }) as APIInstance;
@@ -117,15 +117,15 @@ API.deleteRequiredDocument = (id: string) => {
 };
 
 // document history
-API.documentHistory = () => {
-  return API.get(`/documents/history`);
+API.documentHistory = (query:string) => {
+  return API.get(`/documents/history${query}`);
 };
 
-API.expiredHistory = () => {
-  return API.get(`/documents/expired`);
+API.expiredHistory = (query:string) => {
+  return API.get(`/documents/expired${query}`);
 };
-API.departmentExpiredHistory = () => {
-  return API.get(`/documents/expired?department=true`);
+API.departmentExpiredHistory = (query: string) => {
+  return API.get(`/documents/expired?department=true${query}`);
 };
 
 API.submissionDocuments = (query:string) => {
